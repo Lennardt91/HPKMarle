@@ -1,4 +1,4 @@
-package test.java.de.lab4inf.wrb;
+package de.lab4inf.wrb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -43,5 +43,12 @@ public class Praktikum1Test {
     {
     	double result = script.parse("100+12*5-(20+11)");
     	assertEquals(result,129,eps);
+    }
+	
+	@Test
+	public final void testPowPow() throws IllegalArgumentException, RecognitionException
+    {
+    	double result = script.parse("2^3^5");
+    	assertEquals(Math.pow(2,Math.pow(3,5)),result,eps);
     }
 }

@@ -19,9 +19,7 @@
  *
  */
 
-package test.java.de.lab4inf.wrb;
-
-import de.lab4inf.wrb.*;
+package de.lab4inf.wrb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
