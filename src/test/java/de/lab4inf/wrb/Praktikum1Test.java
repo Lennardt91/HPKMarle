@@ -1,4 +1,4 @@
-package test.java.de.lab4inf.wrb;
+package de.lab4inf.wrb;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -6,9 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import org.antlr.runtime.RecognitionException;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.lab4inf.wrb.Script;
-import de.lab4inf.wrb.WRBScript;
 
 public class Praktikum1Test {
 	final double eps = 1.E-8;
