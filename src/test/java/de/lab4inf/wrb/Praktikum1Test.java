@@ -48,4 +48,11 @@ public class Praktikum1Test {
     	double result = script.parse("2^3^5");
     	assertEquals(Math.pow(2,Math.pow(3,5)),result,eps);
     }
+	
+	@Test
+	public final void testDoubleMinus() throws IllegalArgumentException, RecognitionException
+    {
+    	double result = script.parse("----5*2");
+    	assertEquals(-10,result,eps);
+    }
 }

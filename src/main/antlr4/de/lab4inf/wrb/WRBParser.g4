@@ -23,7 +23,8 @@ exp:(sign)?LBRACKET exp RBRACKET #Bracket
 	|left=exp ADD right=exp #Add
 	|(sign)?function#Func
 	|(sign)?VAR #Var
-	|(sign)?NUMBER#Num;
+	|(sign)?NUMBER#Num
+	|(sign) #signfragment;
 
 function: VAR LBRACKET exp(KOM exp)* RBRACKET;
 

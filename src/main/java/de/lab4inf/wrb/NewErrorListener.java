@@ -24,7 +24,7 @@ public class NewErrorListener extends BaseErrorListener {
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
 			String msg, RecognitionException e) {
 		String message;
-		message = "Syntax Error hat line " + line + " at Postition " + charPositionInLine;
+		message = "Syntax Error at line " + line + " at Postition " + charPositionInLine;
 		throw new IllegalArgumentException(message);
 	}
 	@Override

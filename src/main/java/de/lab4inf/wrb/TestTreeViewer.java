@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.gui.*;
 public class TestTreeViewer {
     public static void main(String[] args) {
         try {
-            showTree("./input");
+            showTree("./input");//TODO: Wahrscheinlich sehr unsicher einen relativen Pfad zu benutzen
         } catch (Exception e) {
             e.printStackTrace();
         }
