@@ -21,12 +21,7 @@
 			<url>http://repo.maven.apache.org/maven2</url>
 		</repository>
 		<repository>
-			<id>sonatype-nexus-
-			
-			
-			
-			
-			staging</id>
+			<id>sonatype-nexus-staging</id>
 			<name>Nexus Release Repository</name>
 			<url>
 				https://oss.sonatype.org/service/local/staging/deploy/maven2/
@@ -59,6 +54,7 @@
 			</resource>
 		</resources>
 		<plugins>
+
 			<plugin>
 				<groupId>org.antlr</groupId>
 				<artifactId>antlr4-maven-plugin</artifactId>
