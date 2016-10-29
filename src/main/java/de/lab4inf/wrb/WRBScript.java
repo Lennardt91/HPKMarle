@@ -12,11 +12,17 @@ import de.lab4inf.wrb.WRBParser;
 
 public class WRBScript extends WRBVisitor implements Script {
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Function getFunction(String name) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		for(int i = 1;i<8;i++){
+			if (func.containsKey(new KeyValue(name,i))) {
+				return func.get(new KeyValue(name,i));
+			}
+		}
+		throw new IllegalArgumentException("Function " + name + " not found");
 	}
+
 
 	@Override
 	public double getVariable(String name) throws IllegalArgumentException {

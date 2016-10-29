@@ -50,6 +50,16 @@ class WRBVisitor extends WRBParserBaseVisitor<Double> {
 
 	@Override
 	public Double visitFuncdec(FuncdecContext ctx) {
+		String name = ctx.VAR(0).getText();
+		String argv[] = new String[ctx.VAR().size() - 1];
+		for (int i = 0; i < argv.length; i++) {
+			argv[i] = ctx.VAR(i + 1).toString();
+		}
+		func.put(new KeyValue<String, Integer>(name, argv.length), new WRBFunction(name, ctx.exp(), argv.length, this, argv));
+		if (func.get(new KeyValue<String, Integer>(name, argv.length)) == null) {
+			System.out.println("Cant insert Function ");
+			System.out.println(name);
+		}
 		return 0.;
 	}
 
@@ -122,5 +132,31 @@ class WRBVisitor extends WRBParserBaseVisitor<Double> {
 	@Override
 	public Double visitExpo(ExpoContext ctx) {
 		return (Math.pow(visit(ctx.left).doubleValue(), visit(ctx.right).doubleValue()));
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Double visitFunction(FunctionContext ctx) throws IllegalArgumentException {
+		String name = ctx.VAR().toString();
+		if (func.containsKey(new KeyValue(name, ctx.exp().size()))) {
+			// Parameter werte berechnen und in Array Speichern
+			double[] ar = new double[ctx.exp().size()];
+			for (int i = 0; i < ctx.exp().size(); i++) {
+				ar[i] = visit(ctx.exp(i));
+			}
+			return func.get(new KeyValue(name, ctx.exp().size())).eval(ar);
+		}
+		throw new IllegalArgumentException("Funktion not found");
+
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Function getFunction(String name) {
+		for (int i = 1; i < 8; i++) {
+			if (func.containsKey(new KeyValue(name, i))) {
+				return func.get(new KeyValue(name, i));
+			}
+		}
+		throw new IllegalArgumentException("Function " + name + " not found");
 	}
 }

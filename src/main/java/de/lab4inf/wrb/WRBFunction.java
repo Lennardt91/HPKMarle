@@ -11,7 +11,7 @@ import de.lab4inf.wrb.WRBParser.ExpContext;
  */
 public class WRBFunction implements Function {
 	/**
-	 * Anzahl der Argumente, Welche die Funtion benötigt
+	 * Anzahl der Argument der Funktion
 	 */
 	protected int argc;
 	/**
@@ -19,11 +19,11 @@ public class WRBFunction implements Function {
 	 */
 	protected String name;
 	/**
-	 * Kontext Knoten, wo die Funktion gespeichert ist
+	 * Kontext Knoten der Funktion
 	 */
 	protected ExpContext ctx;
 	/**
-	 * Liste mit Parameter bezeichnungen
+	 * Liste mit Parameterbezeichnungen
 	 */
 	protected String[] argv;
 
@@ -52,7 +52,7 @@ public class WRBFunction implements Function {
 		}
 
 	}
-
+	
 	@Override
 	public double eval(double... args) throws IllegalArgumentException {
 		Double temp[] = new Double[argc];
@@ -73,30 +73,14 @@ public class WRBFunction implements Function {
 		return result;
 	}
 
-	/**
-	 * getter für Bezeichung
-	 * 
-	 * @return name
-	 */
-
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * getter für den Kontext Knoten
-	 * 
-	 * @return ctx
-	 */
 	public ExpContext getCtx() {
 		return ctx;
 	}
 
-	/**
-	 * getter für die Anzahl der Argumente
-	 * 
-	 * @return argc
-	 */
 	public int getArgc() {
 		return argc;
 	}

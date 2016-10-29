@@ -2,16 +2,26 @@ package de.lab4inf.wrb;
 
 import java.util.Map;
 
-//TODO in er Func Haschmap als Key verwenden, um Funktionen zu überladen
+/**
+ * 
+ * @author marten
+ * Klasse zum verbinden von Key Value paaren.
+ * @param <K> Key des Eintrags
+ * @param <V> value des Eintrags
+ */
 public class KeyValue<K, V> implements Map.Entry<K, V> {
 	private K key;
 	private V value;
-
+	/**
+	 * Konstruktor
+	 * @param key des neuen Elements
+	 * @param value des neuen Elements
+	 */
 	public KeyValue(K key, V value) {
 		this.key = key;
 		this.value = value;
 	}
-
+	
 	public K getKey() {
 		return this.key;
 	}
