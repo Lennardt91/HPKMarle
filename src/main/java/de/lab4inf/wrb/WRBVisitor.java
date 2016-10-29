@@ -4,36 +4,41 @@ import java.util.HashMap;
 
 import de.lab4inf.wrb.WRBParser.*;
 
-class WRBVisitor extends WRBParserBaseVisitor<Double>{
+class WRBVisitor extends WRBParserBaseVisitor<Double> {
 	/**
 	 * HashMap zum Speichern desr Variablenn
 	 */
 	protected HashMap<String, Double> var = new HashMap<String, Double>();
+	/**
+	 * HashMap zum Speichern der Funktionen
+	 */
+	protected HashMap<KeyValue<String, Integer>, Function> func = new HashMap<KeyValue<String, Integer>, Function>();
+
 	@Override
 	public Double visitProgramm(ProgrammContext ctx) {
 		Double result = null;
-		//Durchlaufen aller Programm einträge
+		// Durchlaufen aller Programm einträge
 		for (int i = 0; i < ctx.state().size(); i++) {
 			result = visit(ctx.state(i));
 		}
 		return result;
 	}
-	
+
 	@Override
 	public Double visitState(StateContext ctx) {
 		// Prüfen, ob Variablendeclaration,Funktionsdefinition oder Berechnung
-		if(ctx.exp()!=null){
+		if (ctx.exp() != null) {
 			return visit(ctx.exp());
 		}
-		if(ctx.vardec()!=null){
+		if (ctx.vardec() != null) {
 			return visit(ctx.vardec());
 		}
-		if(ctx.funcdec()!=null) {
+		if (ctx.funcdec() != null) {
 			return visit(ctx.funcdec());
 		}
 		return 0.;
 	}
-	
+
 	@Override
 	public Double visitVardec(VardecContext ctx) {
 		// Wert der Variablen berechnen
@@ -42,22 +47,22 @@ class WRBVisitor extends WRBParserBaseVisitor<Double>{
 		var.put(ctx.VAR().toString(), result);
 		return result;
 	}
-	
+
 	@Override
 	public Double visitFuncdec(FuncdecContext ctx) {
 		return 0.;
 	}
-	
-	//Alle Berechnungen unterhalb von exp
+
+	// Alle Berechnungen unterhalb von exp
 	@Override
 	public Double visitBracket(BracketContext ctx) {
-		//Vorzeichen berücksichtigen
+		// Vorzeichen berücksichtigen
 		if (ctx.sign() == null) {
 			return visit(ctx.exp());
 		}
 		return visit(ctx.sign()) * visit(ctx.exp());
 	}
-	
+
 	@Override
 	public Double visitDiv(DivContext ctx) {
 		return (visit(ctx.left) / visit(ctx.right));
@@ -77,12 +82,12 @@ class WRBVisitor extends WRBParserBaseVisitor<Double>{
 	public Double visitAdd(AddContext ctx) {
 		return (visit(ctx.left) + visit(ctx.right));
 	}
-	
+
 	@Override
 	public Double visitFunc(FuncContext ctx) {
 		return visit(ctx.function());
 	}
-	
+
 	@Override
 	public Double visitVar(VarContext ctx) {
 		// versuchen, wert zu lesen
@@ -96,7 +101,7 @@ class WRBVisitor extends WRBParserBaseVisitor<Double>{
 		}
 		return visit(ctx.sign()) * result;
 	}
-	
+
 	@Override
 	public Double visitNum(NumContext ctx) {
 		// Vorzeichen beachten
@@ -105,7 +110,7 @@ class WRBVisitor extends WRBParserBaseVisitor<Double>{
 		}
 		return Double.valueOf(ctx.NUMBER().toString());
 	}
-	
+
 	@Override
 	public Double visitSign(SignContext ctx) {
 		if (ctx.ADD() == null) {
@@ -113,7 +118,7 @@ class WRBVisitor extends WRBParserBaseVisitor<Double>{
 		}
 		return +1.;
 	}
-	
+
 	@Override
 	public Double visitExpo(ExpoContext ctx) {
 		return (Math.pow(visit(ctx.left).doubleValue(), visit(ctx.right).doubleValue()));

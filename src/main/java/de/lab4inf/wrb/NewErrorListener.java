@@ -11,12 +11,12 @@ import org.antlr.v4.runtime.dfa.DFA;
 /**
  * Klasse für die Fehlerbehandlung innerhalb des Parser.
  * @author marten
- * @version 1.0
+ * @version 1.1
  *
  */
 public class NewErrorListener extends BaseErrorListener {
 	/**
-	 * Methode zum erzeugen einer angepassten Expetion
+	 * Erzeugt einer angepassten Expetion bei einem Syntax Error
 	 * @throws IlligalArugmentException
 	 * @since 23.11.2015
 	 */
