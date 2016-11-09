@@ -50,6 +50,10 @@ public class WRBMathFunction implements Function {
 			System.out.println(nsm.getMessage());
 		}
 	}
+	/**
+	 * Erzeugen mit Method objekt
+	 * @param m Methode von Math.Class
+	 */
 	public WRBMathFunction(Method m){
 		this.name = m.getName();
 		this.argc = m.getParameterCount();
