@@ -50,6 +50,10 @@ public class WRBMathFunction implements Function {
 			System.out.println(nsm.getMessage());
 		}
 	}
+	public WRBMathFunction(Method m){
+		this.name = m.getName();
+		this.argc = m.getParameterCount();
+	}
 
 	@Override
 	public double eval(double... args) {
