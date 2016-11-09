@@ -2,6 +2,7 @@ package de.lab4inf.wrb;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.runtime.RecognitionException;
@@ -11,7 +12,29 @@ import de.lab4inf.wrb.WRBLexer;
 import de.lab4inf.wrb.WRBParser;
 
 public class WRBScript extends WRBVisitor implements Script {
-
+	/**
+	 * Erzeugt WRBScript
+	 */
+	public WRBScript() {
+		InsertMathFunktion();
+	}
+	/**
+	 * ließt alle Mathe Funktionen ein, erstellt die WRBMathFunction Objekte
+	 * und speichert sie ab
+	 */
+	private void InsertMathFunktion() {
+		//Math Funktionen auslesen und einfügen
+		Method methods [] = Math.class.getMethods();
+		for(Method m:methods){
+			func.put(new KeyValue<String, Integer>(m.getName(), m.getParameterCount()), new WRBMathFunction(m));
+		}
+		//WRBMath Funktionen auslesen und einfügen
+		Method methodsWRB[] = WRBMath.class.getMethods();
+		for(Method m:methodsWRB){
+			func.put(new KeyValue<String, Integer>(m.getName(), m.getParameterCount()), new WRBMathFunction(m));
+		}
+		
+	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Function getFunction(String name) throws IllegalArgumentException {
