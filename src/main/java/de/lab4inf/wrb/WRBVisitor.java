@@ -146,7 +146,7 @@ class WRBVisitor extends WRBParserBaseVisitor<Double> {
 			}
 			return func.get(new KeyValue(name, ctx.exp().size())).eval(ar);
 		}
-		throw new IllegalArgumentException("Funktion not found");
+		throw new IllegalArgumentException("Funktion "+ name+" with "+ctx.exp().size()+" paramtern not found");
 
 	}
 
