@@ -3,6 +3,7 @@ package de.lab4inf.wrb;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.runtime.RecognitionException;
@@ -23,17 +24,42 @@ public class WRBScript extends WRBVisitor implements Script {
 	 * und speichert sie ab
 	 */
 	private void InsertMathFunktion() {
-		//Math Funktionen auslesen und einfügen
-		Method methods [] = Math.class.getMethods();
-		for(Method m:methods){
-			func.put(new KeyValue<String, Integer>(m.getName(), m.getParameterCount()), new WRBMathFunction(m));
+		ArrayList<KeyValue<String, Integer>> KeyValueList = new ArrayList<KeyValue<String, Integer>>();
+		//jva.lang.Math Funktionen
+		KeyValueList.add(new KeyValue<String, Integer>("abs", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("acos", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("asin", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("atan", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("atan2", 2));
+		KeyValueList.add(new KeyValue<String, Integer>("cos", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("cosh", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("exp", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("expm1", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("floor", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("getExponent", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("hypot", 2));
+		KeyValueList.add(new KeyValue<String, Integer>("log", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("log10", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("log1p", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("max", 2));
+		KeyValueList.add(new KeyValue<String, Integer>("min", 2));
+		KeyValueList.add(new KeyValue<String, Integer>("pow", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("round", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("sin", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("sinh", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("sqrt", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("tan",1));
+		KeyValueList.add(new KeyValue<String, Integer>("tanh", 1));
+		//de.lab4inf.wrb.WRBMath
+		for(int i = 3; i<=10; i++){
+			KeyValueList.add(new KeyValue<String, Integer>("min", i));
+			KeyValueList.add(new KeyValue<String, Integer>("max", i));
 		}
-		//WRBMath Funktionen auslesen und einfügen
-		Method methodsWRB[] = WRBMath.class.getMethods();
-		for(Method m:methodsWRB){
-			func.put(new KeyValue<String, Integer>(m.getName(), m.getParameterCount()), new WRBMathFunction(m));
-		}
+		KeyValueList.add(new KeyValue<String, Integer>("log2", 2));
 		
+		for(KeyValue<String, Integer>keyValue:KeyValueList){
+			func.put(keyValue, new WRBMathFunction(keyValue.getKey(), keyValue.getValue()));
+		}
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
