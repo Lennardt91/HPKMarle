@@ -47,18 +47,9 @@ public class WRBMathFunction implements Function {
 				m = Math.class.getMethod(name, clazz);
 			}
 		} catch (NoSuchMethodException nsm) {
-			System.out.println(nsm.getMessage());
+			System.err.println(nsm.getMessage());
 		}
 	}
-	/**
-	 * Erzeugen mit Method objekt
-	 * @param m Methode von Math.Class
-	 */
-	public WRBMathFunction(Method m){
-		this.name = m.getName();
-		this.argc = m.getParameterCount();
-	}
-
 	@Override
 	public double eval(double... args) {
 		if (args.length != this.argc) {
