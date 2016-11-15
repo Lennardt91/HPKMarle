@@ -29,109 +29,119 @@ import org.junit.Test;
 
 /**
  * Test of the Wulff RunsBeta-Script language.
- * @author  nwulff
- * @since   16.10.2013
- * @version $Id: SimpleWRBScriptTest.java,v 1.1 2014/10/27 16:49:27 nwulff Exp $
+ * 
+ * @author nwulff
+ * @since 16.10.2013
+ * @version $Id: SimpleWRBScriptTest.java,v 1.2 2016/10/20 16:01:47 nwulff Exp $
  */
 public class SimpleWRBScriptTest {
-    final double eps = 1.E-8;
-    Script script;
-    /**
-     * @throws java.lang.Exception
-     */
-    @Before
-    public final void setUp() throws Exception {
-        script = getScript();
-        assertNotNull("no script implementation",script);
-    }
-    /**
-     * Get the actual implementation for the script test.
-     * @return script implementation
-     */
-    protected Script getScript() {
-        return new WRBScript();
-    }
-    
-    /**
-     * Test method for {@link de.lab4inf.wrb.Script#getVariable(java.lang.String)}.
-     */
-    @Test(expected=IllegalArgumentException.class)
-    public final void testGetUnknownVariable() throws Exception {
-        String key = "dummy";
-        script.getVariable(key);
-    }
-    /**
-     * Test method for {@link de.lab4inf.wrb.Script#setVariable(java.lang.String,double)}.
-     * and {@link de.lab4inf.wrb.WRBScript#getVariable(java.lang.String)}.
-     */
-    @Test
-    public final void testSetGetVariable() throws Exception {
-        double y,x=2.78;
-        String key = "XYZ";
-        script.setVariable(key, x);
-        y = script.getVariable(key);
-        assertEquals(x,y,eps);
-    }
-    /**
-     * Test method for {@link de.lab4inf.wrb.Script#parse(java.lang.String)}.
-     * Testing some very simple operation. More to come...
-     */
+	final double eps = 1.E-8;
+	Script script;
 
-    @Test
-    public final  void testPlus() throws Exception {
-        String task = "2+3";
-        assertEquals(5.0, script.parse(task), eps);
-    }
-    @Test
-    public final  void testMinus() throws Exception {
-        String task = "2 - 6";
-        assertEquals(-4.0, script.parse(task), eps);
-    }
-    @Test
-    public final  void testConstant() throws Exception {
-        String task = "0815; 4711;";
-        assertEquals(4711.0, script.parse(task), eps);
-    }
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public final void setUp() throws Exception {
+		script = getScript();
+		assertNotNull("no script implementation", script);
+	}
 
-    @Test
-    public final  void testSigned() throws Exception {
-        String task = "-2 + 6";
-        assertEquals(4.0, script.parse(task), eps);
-    }
+	/**
+	 * Get the actual implementation for the script test.
+	 * 
+	 * @return script implementation
+	 */
+	protected Script getScript() {
+		return new WRBScript();
+	}
 
-    @Test
-    public void testSignedSecondArg() throws Exception {
-        String task = "2 + -6";
-        assertEquals(-4.0, script.parse(task), eps);
-    }
+	/**
+	 * Test method for
+	 * {@link de.lab4inf.wrb.Script#getVariable(java.lang.String)}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public final void testGetUnknownVariable() throws Exception {
+		String key = "dummy";
+		script.getVariable(key);
+	}
 
-    @Test
-    public final  void testMixedFloat() throws Exception {
-        String task = "2.0/3 - 5.2*4";
-        assertEquals(2./3.0-5.2*4, script.parse(task), eps);
-    }
+	/**
+	 * Test method for
+	 * {@link de.lab4inf.wrb.Script#setVariable(java.lang.String,double)}. and
+	 * {@link de.lab4inf.wrb.WRBScript#getVariable(java.lang.String)}.
+	 */
+	@Test
+	public final void testSetGetVariable() throws Exception {
+		double y, x = 2.78;
+		String key = "XYZ";
+		script.setVariable(key, x);
+		y = script.getVariable(key);
+		assertEquals(x, y, eps);
+	}
 
-    @Test
-    public final  void testLongAdd() throws Exception {
-        String task = "2.0 + 3 + 4.0 + 5";
-        assertEquals(14, script.parse(task), eps);
-    }
+	/**
+	 * Test method for {@link de.lab4inf.wrb.Script#parse(java.lang.String)}.
+	 * Testing some very simple operation. More to come...
+	 */
 
-    @Test
-    public final  void testLongMult() throws Exception {
-        String task = "2 * 3.0 * 4 * 5.000";
-        assertEquals(120, script.parse(task), eps);
-    }
+	@Test
+	public final void testPlus() throws Exception {
+		String task = "2+3";
+		assertEquals(5.0, script.parse(task), eps);
+	}
 
-    @Test
-    public final  void testLongMixed() throws Exception {
-        String task = "2.0 * 3 * 4.0 + 5 + 6.0 / 3 ";
-        assertEquals(31, script.parse(task), eps);
-    }
+	@Test
+	public final void testMinus() throws Exception {
+		String task = "2 - 6";
+		assertEquals(-4.0, script.parse(task), eps);
+	}
 
-    @Test
-    public void testParseBracket() throws Exception {
-        String task = " 2*(4.0 + 3)";
-        assertEquals(14, script.parse(task), eps);
-    }
+	@Test
+	public final void testConstant() throws Exception {
+		String task = "0815; 4711";
+		assertEquals(4711.0, script.parse(task), eps);
+	}
+
+	@Test
+	public final void testSigned() throws Exception {
+		String task = "-2 + 6";
+		assertEquals(4.0, script.parse(task), eps);
+	}
+
+	@Test
+	public void testSignedSecondArg() throws Exception {
+		String task = "2 + -6";
+		assertEquals(-4.0, script.parse(task), eps);
+	}
+
+	@Test
+	public final void testMixedFloat() throws Exception {
+		String task = "2.0/3 - 5.2*4";
+		assertEquals(2. / 3.0 - 5.2 * 4, script.parse(task), eps);
+	}
+
+	@Test
+	public final void testLongAdd() throws Exception {
+		String task = "2.0 + 3 + 4.0 + 5";
+		assertEquals(14, script.parse(task), eps);
+	}
+
+	@Test
+	public final void testLongMult() throws Exception {
+		String task = "2 * 3.0 * 4 * 5.000";
+		assertEquals(120, script.parse(task), eps);
+	}
+
+	@Test
+	public final void testLongMixed() throws Exception {
+		String task = "2.0 * 3 * 4.0 + 5 + 6.0 / 3 ";
+		assertEquals(31, script.parse(task), eps);
+	}
+
+	@Test
+	public void testParseBracket() throws Exception {
+		String task = " 2*(4.0 + 3)";
+		assertEquals(14, script.parse(task), eps);
+	}
 }

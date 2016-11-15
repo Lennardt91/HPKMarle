@@ -47,10 +47,9 @@ public class WRBMathFunction implements Function {
 				m = Math.class.getMethod(name, clazz);
 			}
 		} catch (NoSuchMethodException nsm) {
-			System.out.println(nsm.getMessage());
+			System.err.println(nsm.getMessage());
 		}
 	}
-
 	@Override
 	public double eval(double... args) {
 		if (args.length != this.argc) {

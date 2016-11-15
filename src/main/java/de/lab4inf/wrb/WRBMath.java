@@ -6,46 +6,26 @@ package de.lab4inf.wrb;
  */
 public class WRBMath {
 	/**
-	 * Minimum von 3 Werten
-	 * @param x 
-	 * @param y
-	 * @param z
-	 * @return min{x,y,z}
+	 * Minimum von n double Werten
+	 * @return min(x1,x1...,xn)
 	 */
-	public static double min(double x, double y, double z) {
-		return Math.min(x, Math.min(y, z));
-	}
+	public static double min(double ... arg) {
+		double tmp = Double.MAX_VALUE;
+		for(double x:arg){
+			tmp=Math.min(tmp, x);
+		}
+		return tmp;
+	}	
 	/**
-	 * Minimum von 4 Werten
-	 * @param w
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return min{w,x,y,z}
+	 * Maximum von n double Werten
+	 * @return max(x1,x2,..xn)
 	 */
-	public static double min(double w, double x, double y, double z) {
-		return Math.min(w, Math.min(x, Math.min(y, z)));
-	}
-	/**
-	 * Maximum von 3 Werten
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return max{x,y,z}
-	 */
-	public static double max(double x, double y, double z) {
-		return Math.max(x, Math.max(y, z));
-	}
-	/**
-	 * Maximum von 4 Werten
-	 * @param w
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return max{w,x,y,z}
-	 */
-	public static double max(double w, double x, double y, double z) {
-		return Math.max(w, Math.max(x, Math.max(y, z)));
+	public static double max(double ...arg ) {
+		double tmp = Double.MIN_VALUE;
+		for(double x:arg){
+			tmp=Math.min(tmp, x);
+		}
+		return tmp;
 	}
 	/**
 	 * Logarithmus zur Basis 2

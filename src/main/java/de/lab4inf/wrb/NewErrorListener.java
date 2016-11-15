@@ -16,7 +16,7 @@ import org.antlr.v4.runtime.dfa.DFA;
  */
 public class NewErrorListener extends BaseErrorListener {
 	/**
-	 * Erzeugt einer angepassten Expetion bei einem Syntax Error
+	 * Erzeugt Expetion bei einem Syntax Error
 	 * @throws IlligalArugmentException
 	 * @since 23.11.2015
 	 */
