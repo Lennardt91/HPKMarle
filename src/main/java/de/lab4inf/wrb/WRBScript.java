@@ -43,7 +43,7 @@ public class WRBScript extends WRBVisitor implements Script {
 		KeyValueList.add(new KeyValue<String, Integer>("log1p", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("max", 2));
 		KeyValueList.add(new KeyValue<String, Integer>("min", 2));
-		KeyValueList.add(new KeyValue<String, Integer>("pow", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("pow", 2));
 		KeyValueList.add(new KeyValue<String, Integer>("round", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("sin", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("sinh", 1));
