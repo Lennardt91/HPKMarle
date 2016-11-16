@@ -55,7 +55,7 @@ public class WRBScript extends WRBVisitor implements Script {
 			KeyValueList.add(new KeyValue<String, Integer>("min", i));
 			KeyValueList.add(new KeyValue<String, Integer>("max", i));
 		}
-		KeyValueList.add(new KeyValue<String, Integer>("log2", 2));
+		KeyValueList.add(new KeyValue<String, Integer>("log2", 1));
 		
 		for(KeyValue<String, Integer>keyValue:KeyValueList){
 			func.put(keyValue, new WRBMathFunction(keyValue.getKey(), keyValue.getValue()));
