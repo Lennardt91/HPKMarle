@@ -54,12 +54,6 @@ public class Praktikum2Test {
     assertEquals(11,script.parse(task),eps);     }
     
     @Test
-    public final void testMathFunctionLog() throws Exception{
-    	String task = "log(5)";
-    	assertEquals(Math.log(5),script.parse(task), eps);
-    }
-    
-    @Test
     public final void testMathFunctionMax1() throws Exception{
     	String task = "max(3,23)";
     	assertEquals(23,script.parse(task), eps);
