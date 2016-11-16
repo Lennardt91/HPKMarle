@@ -2,7 +2,6 @@ package de.lab4inf.wrb;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
