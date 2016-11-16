@@ -37,7 +37,11 @@ public class WRBScript extends WRBVisitor implements Script {
 		KeyValueList.add(new KeyValue<String, Integer>("floor", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("getExponent", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("hypot", 2));
+		KeyValueList.add(new KeyValue<String, Integer>("lb", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("ld", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("ln", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("log", 1));
+		KeyValueList.add(new KeyValue<String, Integer>("logE", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("log10", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("log1p", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("max", 2));
@@ -49,6 +53,7 @@ public class WRBScript extends WRBVisitor implements Script {
 		KeyValueList.add(new KeyValue<String, Integer>("sqrt", 1));
 		KeyValueList.add(new KeyValue<String, Integer>("tan",1));
 		KeyValueList.add(new KeyValue<String, Integer>("tanh", 1));
+		
 		//de.lab4inf.wrb.WRBMath
 		for(int i = 3; i<=10; i++){
 			KeyValueList.add(new KeyValue<String, Integer>("min", i));
@@ -59,6 +64,7 @@ public class WRBScript extends WRBVisitor implements Script {
 		for(KeyValue<String, Integer>keyValue:KeyValueList){
 			func.put(keyValue, new WRBMathFunction(keyValue.getKey(), keyValue.getValue()));
 		}
+		
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
