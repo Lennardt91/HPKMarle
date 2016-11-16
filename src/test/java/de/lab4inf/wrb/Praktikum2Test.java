@@ -43,6 +43,16 @@ public class Praktikum2Test {
     String task = "f(x)=2+x;f(4)";         
     assertEquals(6,script.parse(task),eps);     }
     
+    @Test     
+    public final void testFuncOnItself() throws Exception {  
+    String task = "f(x)=2+x;f(f(4))";         
+    assertEquals(8,script.parse(task),eps);     }
+    
+    @Test     
+    public final void testAddTwoFunctions() throws Exception {  
+    String task = "f(x)=2+x;a(x)=2+x;f(3)+a(4)";         
+    assertEquals(11,script.parse(task),eps);     }
+    
     @Test
     public final void testMathFunctionLog() throws Exception{
     	String task = "log(5)";
@@ -51,7 +61,7 @@ public class Praktikum2Test {
     
     @Test
     public final void testMathFunctionMax1() throws Exception{
-    	String task = "max(3,23,3)";
+    	String task = "max(3,23)";
     	assertEquals(23,script.parse(task), eps);
     }
     
