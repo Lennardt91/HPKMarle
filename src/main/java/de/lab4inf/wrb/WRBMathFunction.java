@@ -41,16 +41,15 @@ public class WRBMathFunction implements Function {
 		try {
 			this.name = name;
 			this.argc = argc;
-			if(name.equals("log")){
+			if (name.equals("log")) {
 				m = Math.class.getMethod("log10", clazz);
-			}
-			else if(name.equals("logE")||name.equals("ln")){
+			} else if (name.equals("logE") || name.equals("ln")) {
 				m = Math.class.getMethod("log", clazz);
-			}
-			else if(name.equals("ld")||name.equals("lb")){
+			} else if (name.equals("ld") || name.equals("lb")) {
 				m = WRBMath.class.getMethod("log2", clazz);
-			}
-			else if (name.equals("log2") || argc > 2) {
+			} else if (name.equals("log2") || name.equals("lb")) {
+				m = WRBMath.class.getMethod(name, clazz);
+			} else if (argc > 2) {
 				m = WRBMath.class.getMethod(name, clazz);
 			} else {
 				m = Math.class.getMethod(name, clazz);
@@ -59,6 +58,7 @@ public class WRBMathFunction implements Function {
 			System.err.println(nsm.getMessage());
 		}
 	}
+
 	@Override
 	public double eval(double... args) {
 		if (args.length != this.argc) {
