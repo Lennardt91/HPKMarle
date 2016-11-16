@@ -356,7 +356,6 @@ public abstract class AbstractScriptTest {
     }
 
     @Test
-    @Ignore
     public void testParsePow3() throws Exception {
         String task = " 2 ** (1+3)";
         assertEquals(16, script.parse(task), eps);
@@ -369,7 +368,6 @@ public abstract class AbstractScriptTest {
     }
 
     @Test
-    @Ignore
     public void testParsePow5() throws Exception {
         String task = " (3*6)**(3 - 5)";
         assertEquals(Math.pow(18, -2), script.parse(task), eps);
