@@ -58,7 +58,6 @@ public class WRBMathFunction implements Function {
 			System.err.println(nsm.getMessage());
 		}
 	}
-
 	@Override
 	public double eval(double... args) {
 		if (args.length != this.argc) {

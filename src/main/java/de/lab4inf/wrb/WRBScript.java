@@ -55,7 +55,7 @@ public class WRBScript extends WRBVisitor implements Script {
 		KeyValueList.add(new KeyValue<String, Integer>("tanh", 1));
 		
 		//de.lab4inf.wrb.WRBMath
-		for(int i = 3; i<=10; i++){
+		for(int i = 3; i<=5; i++){
 			KeyValueList.add(new KeyValue<String, Integer>("min", i));
 			KeyValueList.add(new KeyValue<String, Integer>("max", i));
 		}
