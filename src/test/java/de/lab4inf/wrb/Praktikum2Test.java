@@ -61,20 +61,20 @@ public class Praktikum2Test {
     
     @Test
     public final void testMathFunctionMax2() throws Exception{
-    	String task = "max(3,5,6,3,23,3)";
+    	String task = "max(3,5,6,3,23)";
     	assertEquals(23,script.parse(task), eps);
     }
 
     @Test
     public final void testMathFunctionMaxWithVariables() throws Exception{
-    	String task = "y = 1;x = 45; max(3,5,x,3,y,3)";
+    	String task = "y = 1;x = 45; max(3,5,x,3,y)";
     	assertEquals(45,script.parse(task), eps);
     }
     
     @Test
     public final void testMathFunctionMaxWithFunction() throws Exception{
-    	String task = "max(3,5,sqrt(14),3,23,3)";
-    	assertEquals(Math.sqrt(14),script.parse(task), eps);
+    	String task = "max(3,5,pow(14,2),3,4)";
+    	assertEquals(Math.pow(14, 2),script.parse(task), eps);
     }
 
 
