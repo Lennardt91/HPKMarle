@@ -64,6 +64,10 @@ public class WRBScript extends WRBVisitor implements Script {
 		for(KeyValue<String, Integer>keyValue:KeyValueList){
 			func.put(keyValue, new WRBMathFunction(keyValue.getKey(), keyValue.getValue()));
 		}
+		//Default Variablen
+		var.put("pi", Math.PI);
+		var.put("e", Math.E);
+		var.put("x", 1.0);
 		
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
