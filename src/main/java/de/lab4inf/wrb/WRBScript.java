@@ -14,15 +14,21 @@ import de.lab4inf.wrb.WRBParser;
 public class WRBScript extends WRBVisitor implements Script {
 	/**
 	 * Erzeugt WRBScript
+	 * @throws NoSuchMethodException 
 	 */
-	public WRBScript() {
-		InsertMathFunktion();
+	public WRBScript() throws NoSuchMethodException {
+		try {
+			InsertMathFunktion();
+		} catch (NoSuchMethodException e) {
+			throw e;
+		}
 	}
 	/**
 	 * ließt alle Mathe Funktionen ein, erstellt die WRBMathFunction Objekte
 	 * und speichert sie ab
+	 * @throws NoSuchMethodException 
 	 */
-	private void InsertMathFunktion() {
+	private void InsertMathFunktion() throws NoSuchMethodException {
 		ArrayList<KeyValue<String, Integer>> KeyValueList = new ArrayList<KeyValue<String, Integer>>();
 		//jva.lang.Math Funktionen
 		KeyValueList.add(new KeyValue<String, Integer>("abs", 1));
@@ -62,7 +68,11 @@ public class WRBScript extends WRBVisitor implements Script {
 		KeyValueList.add(new KeyValue<String, Integer>("log2", 1));
 		
 		for(KeyValue<String, Integer>keyValue:KeyValueList){
-			func.put(keyValue, new WRBMathFunction(keyValue.getKey(), keyValue.getValue()));
+			try {
+				func.put(keyValue, new WRBMathFunction(keyValue.getKey(), keyValue.getValue()));
+			} catch (NoSuchMethodException e) {
+				throw e;
+			}
 		}
 		//Default Variablen
 		var.put("pi", Math.PI);

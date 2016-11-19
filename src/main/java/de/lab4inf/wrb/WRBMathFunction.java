@@ -31,8 +31,9 @@ public class WRBMathFunction implements Function {
 	 *            Bezeichnung der Funktion
 	 * @param argc
 	 *            Anzahl der Argumente
+	 * @throws NoSuchMethodException 
 	 */
-	public WRBMathFunction(String name, int argc) {
+	public WRBMathFunction(String name, int argc) throws NoSuchMethodException {
 		// Array an Class Objekten erzeugen zum erzeugen des method objekts
 		Class<?>[] clazz = new Class[argc];
 		for (int i = 0; i < clazz.length; i++) {
@@ -41,21 +42,25 @@ public class WRBMathFunction implements Function {
 		try {
 			this.name = name;
 			this.argc = argc;
-			if (name.equals("log")) {
-				m = Math.class.getMethod("log10", clazz);
-			} else if (name.equals("logE") || name.equals("ln")) {
-				m = Math.class.getMethod("log", clazz);
-			} else if (name.equals("ld") || name.equals("lb")) {
-				m = WRBMath.class.getMethod("log2", clazz);
-			} else if (name.equals("log2") || name.equals("lb")) {
-				m = WRBMath.class.getMethod(name, clazz);
-			} else if (argc > 2) {
-				m = WRBMath.class.getMethod(name, clazz);
-			} else {
-				m = Math.class.getMethod(name, clazz);
+			switch(name){
+				case "log":
+					m = Math.class.getMethod("log10", clazz);
+				case "logE":
+					m = Math.class.getMethod("log10", clazz);
+				case "ln":
+					m = Math.class.getMethod("log", clazz);
+				case "ld":
+					m = WRBMath.class.getMethod("log2", clazz);
+				case "log2":
+					m = WRBMath.class.getMethod("log2", clazz);
+				default:
+					if (argc > 2)
+						m = WRBMath.class.getMethod(name, clazz);
+					else
+						m = Math.class.getMethod(name, clazz);
 			}
-		} catch (NoSuchMethodException nsm) {
-			System.err.println(nsm.getMessage());
+		} catch (NoSuchMethodException e) {
+			throw e;
 		}
 	}
 	@Override
