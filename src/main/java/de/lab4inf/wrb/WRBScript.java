@@ -16,11 +16,11 @@ public class WRBScript extends WRBVisitor implements Script {
 	 * Erzeugt WRBScript
 	 * @throws NoSuchMethodException 
 	 */
-	public WRBScript() throws NoSuchMethodException {
+	public WRBScript() {
 		try {
 			InsertMathFunktion();
 		} catch (NoSuchMethodException e) {
-			throw e;
+			//throw e;
 		}
 	}
 	/**
@@ -71,7 +71,7 @@ public class WRBScript extends WRBVisitor implements Script {
 			try {
 				func.put(keyValue, new WRBMathFunction(keyValue.getKey(), keyValue.getValue()));
 			} catch (NoSuchMethodException e) {
-				throw e;
+				//throw e;
 			}
 		}
 		//Default Variablen

@@ -45,19 +45,29 @@ public class WRBMathFunction implements Function {
 			switch(name){
 				case "log":
 					m = Math.class.getMethod("log10", clazz);
+					break;
 				case "logE":
-					m = Math.class.getMethod("log10", clazz);
+					m = Math.class.getMethod("log", clazz);
+					break;
 				case "ln":
 					m = Math.class.getMethod("log", clazz);
+					break;
 				case "ld":
 					m = WRBMath.class.getMethod("log2", clazz);
+					break;
+				case "lb":
+					m = WRBMath.class.getMethod("log2", clazz);
+					break;
 				case "log2":
 					m = WRBMath.class.getMethod("log2", clazz);
+					break;
 				default:
 					if (argc > 2)
 						m = WRBMath.class.getMethod(name, clazz);
 					else
 						m = Math.class.getMethod(name, clazz);
+					
+					break;
 			}
 		} catch (NoSuchMethodException e) {
 			throw e;
