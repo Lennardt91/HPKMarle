@@ -47,17 +47,11 @@ public class WRBMathFunction implements Function {
 					m = Math.class.getMethod("log10", clazz);
 					break;
 				case "logE":
-					m = Math.class.getMethod("log", clazz);
-					break;
 				case "ln":
 					m = Math.class.getMethod("log", clazz);
 					break;
 				case "ld":
-					m = WRBMath.class.getMethod("log2", clazz);
-					break;
 				case "lb":
-					m = WRBMath.class.getMethod("log2", clazz);
-					break;
 				case "log2":
 					m = WRBMath.class.getMethod("log2", clazz);
 					break;
