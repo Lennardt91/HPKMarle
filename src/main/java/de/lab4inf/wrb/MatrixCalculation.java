@@ -4,7 +4,7 @@ package de.lab4inf.wrb;
  * @author marten lennardt
  *
  */
-public final class MatrixCalculation {
+public final class MatrixCalculation implements Runnable{
 
 	/**
 	 * Multipliziert 2 Matrizen parallel
@@ -53,5 +53,11 @@ public final class MatrixCalculation {
 					c[i][j] += a[i][k]*b[k][j];
 		
 		return new WRBMatrix(c);
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }
