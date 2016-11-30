@@ -38,8 +38,9 @@ public final class MatrixCalculation{
 
 	/**
 	 * Multipliziert 2 Matrizen parallel(Algorithmus 1 von Praktikumsaufgabe)
+	 * 
 	 * @param A Erste WRBMatrix
-	 * @param B Zweise WRBMatrix
+	 * @param B Zweite WRBMatrix
 	 * @return Ergebnis als WRBMatrix
 	 * @throws IllegalArgumentException
 	 */	
@@ -63,7 +64,7 @@ public final class MatrixCalculation{
 		
 		
 		//////
-		ExecutorService exec = Executors.newFixedThreadPool(NUM_CORES * 2);//TODO: Number of Threads (100 momentan) festlegen
+		ExecutorService exec = Executors.newFixedThreadPool(NUM_CORES*2);//TODO: Number of Threads (100 momentan) festlegen
 		try{
 			for (int i = 0; i<A.getRowCount(); i++){
 				final int iFinal = i; //i muss final sein zum weiterbearbeiten
@@ -78,6 +79,7 @@ public final class MatrixCalculation{
 			}
 		} finally {
 			exec.shutdown();
+			while(!exec.isTerminated()){}
 		}
 		//////
 		return new WRBMatrix(c);
