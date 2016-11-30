@@ -141,7 +141,7 @@ public class WRBMatrixTest {
 			time = System.nanoTime();
 			c = a.matParallel1(b);
 			time-= System.nanoTime();
-			C.put(i, c);
+			assertEquals(true, c.equals(C.get(i)));
 			paralleltimes1.put(i, (time/scale));
 		}
 		Ausgabe(serieltimes,paralleltimes1,"paralel1");
