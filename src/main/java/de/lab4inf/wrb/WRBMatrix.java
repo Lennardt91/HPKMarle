@@ -44,7 +44,7 @@ public class WRBMatrix {
 	}
 	
 	/**
-	 * Konstruktor fuer random Matrix in random Groesse(beschraenkt auf maximal 5 Spalten und Reihen)
+	 * Konstruktor fuer random Matrix in random Groesse(beschraenkt auf maxRowAndColValue)
 	 */
 	public WRBMatrix(){
 		this.m = this.getRndRowOrColSize();
@@ -121,11 +121,26 @@ public class WRBMatrix {
 		double[][] c = B.getMatrix();
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
-				if (this.matrix[i][j] != c[i][j])
+				if (this.matrix[i][j] != c[i][j]){
+					//System.out.println("false");
+					//this.printMatr();
+					//B.printMatr();
 					return false;
+				}
 			}
 		}
 		return true;
+	}
+	/**
+	 * Gibt eine Matrix auf der Konsole aus
+	 */
+	public void printMatr(){
+		for (int i = 0; i<this.getRowCount();i++){
+			for (int j = 0; j<this.getColumnCount(); j++)
+				System.out.print("|"+this.matrix[i][j]);
+			System.out.println();
+		}
+		System.out.println();
 	}
 
 }
