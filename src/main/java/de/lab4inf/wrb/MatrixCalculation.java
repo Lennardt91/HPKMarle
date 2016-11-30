@@ -51,6 +51,8 @@ public final class MatrixCalculation{
 		double [][]b = B.getMatrix();
 		double [][]c = new double [A.getRowCount()][B.getColumnCount()];
 		
+		final int NUM_CORES = Runtime.getRuntime().availableProcessors();
+		
 		
 		/* //TODO: Noch keine parallele Ausfuehrung
 		for (int i = 1; i<A.getRowCount(); i++)
@@ -61,15 +63,15 @@ public final class MatrixCalculation{
 		
 		
 		//////
-		ExecutorService exec = Executors.newFixedThreadPool(10);//TODO: Number of Threads (100 momentan) festlegen
+		ExecutorService exec = Executors.newFixedThreadPool(NUM_CORES * 2);//TODO: Number of Threads (100 momentan) festlegen
 		try{
-			for (int i = 1; i<A.getRowCount(); i++){
+			for (int i = 0; i<A.getRowCount(); i++){
 				final int iFinal = i; //i muss final sein zum weiterbearbeiten
 				exec.submit(new Runnable(){
 					@Override
 					public void run(){
-					for (int j = 1; j<B.getColumnCount(); j++)
-						for (int k = 1; k<A.getColumnCount(); k++)
+					for (int j = 0; j<B.getColumnCount(); j++)
+						for (int k = 0; k<A.getColumnCount(); k++)
 							c[iFinal][j] += a[iFinal][k]*b[k][j];
 					}
 				});
