@@ -1,10 +1,15 @@
 package de.lab4inf.wrb;
+
+import java.util.concurrent.ExecutorService;
+
+import java.util.concurrent.Executors;//.Executors;
+
 /**
  * Klasse fuer Berechnungen mit WRBMatrix Matrizen
  * @author marten lennardt
  *
  */
-public final class MatrixCalculation implements Runnable{
+public final class MatrixCalculation{
 
 	/**
 	 * Multipliziert 2 Matrizen parallel
@@ -46,18 +51,50 @@ public final class MatrixCalculation implements Runnable{
 		double [][]b = B.getMatrix();
 		double [][]c = new double [A.getRowCount()][B.getColumnCount()];
 		
-		//TODO: Noch keine parallele Ausfuehrung
+		
+		/* //TODO: Noch keine parallele Ausfuehrung
 		for (int i = 1; i<A.getRowCount(); i++)
 			for (int j = 1; j<B.getColumnCount(); j++)
 				for (int k = 1; k<A.getColumnCount(); k++)
 					c[i][j] += a[i][k]*b[k][j];
+		*/
 		
+		
+		//////
+		ExecutorService exec = Executors.newFixedThreadPool(10);//TODO: Number of Threads (100 momentan) festlegen
+		try{
+			for (int i = 1; i<A.getRowCount(); i++){
+				final int iFinal = i; //i muss final sein zum weiterbearbeiten
+				exec.submit(new Runnable(){
+					@Override
+					public void run(){
+					for (int j = 1; j<B.getColumnCount(); j++)
+						for (int k = 1; k<A.getColumnCount(); k++)
+							c[iFinal][j] += a[iFinal][k]*b[k][j];
+					}
+				});
+			}
+		} finally {
+			exec.shutdown();
+		}
+		//////
 		return new WRBMatrix(c);
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * Berechnet, ob eine Matrix Multiplikation ueberhaupt in der Reihenfolge moeglich ist
+	 * 
+	 * @param A  Erste zu multiplizierende Matrix
+	 * @param B  Letzte zu multiplizierende Matrix
+	 * @return true, falls eine multiplikation moeglich ist
+	 * @throws IllegalArgumentException falls keine multiplikation moeglich ist
+	 */
+	public boolean matrixMulPossible(WRBMatrix A, WRBMatrix B) throws IllegalArgumentException{
+		if (A.getColumnCount() == B.getRowCount())
+			return true;
+		else
+			throw new IllegalArgumentException("Wrong matrix size. AColSize:" + A.getColumnCount() + " BRowSize:" + B.getRowCount());
 	}
+	
+
 }
