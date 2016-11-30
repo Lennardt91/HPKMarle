@@ -1,5 +1,7 @@
 package de.lab4inf.wrb;
 
+import java.util.HashMap;
+
 /**
  * Mathematische Matrix
  * 
@@ -58,6 +60,9 @@ public class WRBMatrix {
 	 */
 	public WRBMatrix matSeriell(WRBMatrix B) {
 		return MatrixCalculation.matSeriell(this, B);
+	}
+	public WRBMatrix matParallel1 (WRBMatrix B) {
+		return MatrixCalculation.matParallel1(this, B);
 	}
 
 	/**
