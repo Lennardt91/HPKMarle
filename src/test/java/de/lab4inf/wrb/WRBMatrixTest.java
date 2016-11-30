@@ -69,9 +69,9 @@ public class WRBMatrixTest {
 		HashMap<Integer, WRBMatrix> B = new HashMap<>();
 		HashMap<Integer, WRBMatrix> C = new HashMap<>();
 		HashMap<Integer, Long> serieltimes = new HashMap<>();
-		HashMap<Integer, Long> paraleltimes = new HashMap<>();
+		HashMap<Integer, Long> paraleltimes1 = new HashMap<>();
 		WRBMatrix a,b,c;
-		int maxsize = 2048;
+		int maxsize = 1024;
 		int scale = -(int) Math.pow(10, 6);
 		long time = 0;
 		for(int i = 64;i<2049;i*=2){
@@ -88,15 +88,43 @@ public class WRBMatrixTest {
 			C.put(i, c);
 			serieltimes.put(i, (time/scale));
 		}
-		Ausgabe(serieltimes,paraleltimes,"seriel");
+		
+		for(int i = 64;i<=maxsize;i*=2){
+			a = A.get(i);
+			b = B.get(i);
+			time = System.nanoTime();
+			c = a.matParallel1(b);
+			time-= System.nanoTime();
+			C.put(i, c);
+			paraleltimes1.put(i, (time/scale));
+		}
+		Ausgabe(serieltimes,paraleltimes1,"seriel");
+		
 		
 		
 	}
 	public void Ausgabe (HashMap<Integer, Long>serieltime,HashMap<Integer, Long> paraltime,String name){
 		String format = name+"\nn\t\t|t seq\t\t|t pall\t\t|s(n)";
 		int sice = (int) Math.pow(2,5+serieltime.size());
+		double speedup=0.;
 		for(int i = 64;i<=sice;i*=2){
-			format+="\n"+i+"\t\t|"+serieltime.get(i)+"ms\t\t|"+0+"ms\t\t|"+0+"ms";
+			speedup = ((1.0*paraltime.get(i))/serieltime.get(i));
+			//Aus 2 Nackommastellen bechränken
+			speedup = speedup * 100;
+			speedup = Math.round(speedup);
+			speedup = speedup / 100;
+			if(serieltime.get(i)>9999 && paraltime.get(i)>9999){
+				format+="\n"+i+"\t\t|"+serieltime.get(i)+"ms\t|"+paraltime.get(i)+"ms\t|"+speedup;
+			}
+			else if(serieltime.get(i)>9999){
+				format+="\n"+i+"\t\t|"+serieltime.get(i)+"ms\t|"+paraltime.get(i)+"ms\t\t|"+speedup;
+			}
+			else if(paraltime.get(i)>9999){
+				format+="\n"+i+"\t\t|"+serieltime.get(i)+"ms\t\t|"+paraltime.get(i)+"ms\t|"+speedup;
+			}
+			else{
+				format+="\n"+i+"\t\t|"+serieltime.get(i)+"ms\t\t|"+paraltime.get(i)+"ms\t\t|"+speedup;
+			}
 		}
 		System.out.println(format);
 		
