@@ -3,28 +3,19 @@ package de.lab4inf.wrb;
 /**
  * Mathematische Matrix
  * 
- * @author marten lenard
+ * @author marten lennardt
  *
  */
 public class WRBMatrix {
-	/**
-	 * Anzahl Zeilen
-	 */
-	int m;
-	/**
-	 * Anzahl Spalten
-	 */
-	int n;
-	/**
-	 * Matrix
-	 */
-	double[][] matrix;
+	
+	int m;  //Anzahl Zeilen der Matrix
+	int n; //Anzahl Spalten der Matrix
+	double[][] matrix; //Matrix als 2 dimensionales Array
 
 	/**
 	 * Konstruktor
 	 * 
-	 * @param matrix
-	 *            2 Dim. Array mit den Zahlenwerten
+	 * @param matrix 2 Dim. Array mit den Zahlenwerten
 	 */
 	public WRBMatrix(double[][] matrix) {
 		this.matrix = matrix;
@@ -35,7 +26,7 @@ public class WRBMatrix {
 
 	/**
 	 * 
-	 * @return Anzahl der Reihen
+	 * @return Anzahl der Spalten
 	 */
 	public int getColumnCount() {
 		return this.n;
@@ -52,7 +43,7 @@ public class WRBMatrix {
 	/**
 	 * Matrix als 2 Dim. Array
 	 * 
-	 * @return Matrix
+	 * @return Matrix als 2 dimensionales Array
 	 */
 	public double[][] getMatrix() {
 		return this.matrix;
@@ -62,13 +53,18 @@ public class WRBMatrix {
 	 * Serielle Matrix Multiplikation
 	 * 
 	 * @param B
-	 *            WRBMatrix mit dem multipliziert werden soll
-	 * @return A*B
+	 *            WRBMatrix mit der multipliziert werden soll
+	 * @return Ergebnis der seriellen Berechnung als WRBMatrix
 	 */
 	public WRBMatrix matSeriell(WRBMatrix B) {
 		return MatrixCalculation.matSeriell(this, B);
 	}
 
+	/**
+	 * Prueft 2 Matrizen auf Gleichheit
+	 * @param B Matrix mit der die andere Matrix verglichen werden soll
+	 * @return true, wenn die Matrizen gleich sind, sonst false
+	 */
 	public boolean equals(WRBMatrix B) {
 		if (this.m != B.getRowCount())
 			return false;
