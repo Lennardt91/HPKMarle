@@ -104,7 +104,7 @@ public class WRBMatrixTest {
 		
 	}
 	public void Ausgabe (HashMap<Integer, Long>serieltime,HashMap<Integer, Long> paraltime,String name){
-		String format = name+"\nn\t\t|t seq\t\t|t pall\t\t|s(n)";
+		String format = name+"\nn\t\t|t seq\t\t|t para\t\t|s(n)";
 		int sice = (int) Math.pow(2,5+serieltime.size());
 		double speedup=0.;
 		for(int i = 64;i<=sice;i*=2){
