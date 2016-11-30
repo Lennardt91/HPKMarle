@@ -18,7 +18,7 @@ public class WRBMatrixTest {
 	}
 
 	@Test
-	public void TestResult2x2() {
+	public void TestResult2x2Seriell() {
 		double[][] a = new double[3][3];
 		double[][] b = new double[3][3];
 		double[][] c = new double[3][3];
@@ -53,15 +53,61 @@ public class WRBMatrixTest {
 		result=A.matSeriell(B);
 		assertEquals(true, result.equals(C));
 	}
+	@Test
+	public void TestResult2x2Parallel1() {
+		double[][] a = new double[3][3];
+		double[][] b = new double[3][3];
+		double[][] c = new double[3][3];
+		a[0][0] = 3;
+		a[0][1] = 5;
+		a[0][2] = 7;
+		a[1][0] = 2;
+		a[1][1] = 6;
+		a[1][2] = 5;
+		a[2][0] = 9;
+		a[2][1] = 8;
+		a[2][2] = 4;
+		b[0][0] = 2;
+		b[0][1] = 5;
+		b[0][2] = 7;
+		b[1][0] = 3;
+		b[1][1] = 4;
+		b[1][2] = 2;
+		b[2][0] = 9;
+		b[2][1] = 5;
+		b[2][2] = 1;
+		c[0][0] = 84;
+		c[0][1] = 70;
+		c[0][2] = 38;
+		c[1][0] = 67;
+		c[1][1] = 59;
+		c[1][2] = 31;
+		c[2][0] = 78;
+		c[2][1] = 97;
+		c[2][2] = 83;
+		WRBMatrix A = new WRBMatrix(a), B = new WRBMatrix(b), C = new WRBMatrix(c), result;
+		result=A.matParallel1(B);
+		assertEquals(true, result.equals(C));
+	}
 	@Test(expected=IllegalArgumentException.class)
-	public void TestWrongDimension(){
+	public void TestWrongDimensionSeriell(){
 		WRBMatrix A = GenerateMatrix(4, 5),B = GenerateMatrix(4, 5),C = null;
 		C = A.matSeriell(B);
 	}
 	@Test(expected=IllegalArgumentException.class)
-	public void TestWrongDimension2(){
+	public void TestWrongDimensionParallel1(){
+		WRBMatrix A = GenerateMatrix(4, 5),B = GenerateMatrix(4, 5),C = null;
+		C = A.matParallel1(B);
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void TestWrongDimension2Seriell(){
 		WRBMatrix A = GenerateMatrix(1,1),B = GenerateMatrix(10,10),C =null;
 		C = A.matSeriell(B);
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void TestWrongDimension2Parallel1(){
+		WRBMatrix A = GenerateMatrix(1,1),B = GenerateMatrix(10,10),C =null;
+		C = A.matParallel1(B);
 	}
 	@Test
 	public void TimingTest(){
@@ -69,7 +115,7 @@ public class WRBMatrixTest {
 		HashMap<Integer, WRBMatrix> B = new HashMap<>();
 		HashMap<Integer, WRBMatrix> C = new HashMap<>();
 		HashMap<Integer, Long> serieltimes = new HashMap<>();
-		HashMap<Integer, Long> paraleltimes1 = new HashMap<>();
+		HashMap<Integer, Long> paralleltimes1 = new HashMap<>();
 		WRBMatrix a,b,c;
 		int maxsize = 1024;
 		int scale = -(int) Math.pow(10, 6);
@@ -96,9 +142,9 @@ public class WRBMatrixTest {
 			c = a.matParallel1(b);
 			time-= System.nanoTime();
 			C.put(i, c);
-			paraleltimes1.put(i, (time/scale));
+			paralleltimes1.put(i, (time/scale));
 		}
-		Ausgabe(serieltimes,paraleltimes1,"seriel");
+		Ausgabe(serieltimes,paralleltimes1,"paralel1");
 		
 		
 		
@@ -109,7 +155,7 @@ public class WRBMatrixTest {
 		double speedup=0.;
 		for(int i = 64;i<=sice;i*=2){
 			speedup = ((1.0*paraltime.get(i))/serieltime.get(i));
-			//Aus 2 Nackommastellen bechränken
+			//Auf 2 Nackommastellen bechränken
 			speedup = speedup * 100;
 			speedup = Math.round(speedup);
 			speedup = speedup / 100;
