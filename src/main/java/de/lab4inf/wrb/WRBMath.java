@@ -61,6 +61,7 @@ public class WRBMath {
 		}
 		return tmp;
 	}
+	
 
 	/**
 	 * Logarithmus zur Basis 2

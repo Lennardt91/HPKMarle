@@ -15,7 +15,7 @@ public final class MatrixCalculation {
 		int l = A.getColumnCount();
 		System.out.println("m;n;i\n");
 		for(int m = 0;m<l;m++){
-			for (int n = 0;n<l;m++){
+			for (int n = 0;n<l;n++){
 				for(int i = 0;i<c.length;i++){
 					System.out.println(m+";"+n+";"+i);
 					c[m][n]+=a[m][i]*b[i][n];
