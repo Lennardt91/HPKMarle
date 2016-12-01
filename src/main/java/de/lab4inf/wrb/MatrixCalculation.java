@@ -58,15 +58,36 @@ public final class MatrixCalculation {
 		}
 		return new WRBMatrix(c);
 	}
-	public static WRBMatrix matParallel2(WRBMatrix A,WRBMatrix B){
+
+	public static WRBMatrix matParallel2(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
-		//TODO: algorithmus
-		return null;
+		double[][] a = A.getMatrix(), b = B.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
+		ExecutorService exec = Executors.newFixedThreadPool(B.getColumnCount());
+		try {
+			for (int i = 0; i < A.getRowCount(); i++) {
+				final int fi = i;
+				exec.submit(new Runnable() {
+					@Override
+					public void run() {
+						for (int j = 0; j < B.getColumnCount(); j++) {
+							for (int k = 0; k < A.getColumnCount(); k++) {
+								c[fi][j] += a[fi][k] * b[k][j];
+							}
+						}
+					}
+				});
+
+			}
+		} finally {
+			exec.shutdown();
+			while (!exec.isTerminated()) {
+			}
+		}
+		return new WRBMatrix(c);
 	}
-	
-	
+
 	public static WRBMatrix matParallel3(WRBMatrix A, WRBMatrix B) {
-		matrixMulPossible(A,B);
+		matrixMulPossible(A, B);
 		WRBMatrix R;
 		R = B.transpose();
 		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
@@ -79,16 +100,15 @@ public final class MatrixCalculation {
 					@Override
 					public void run() {
 						for (int j = 0; j < B.getColumnCount(); j++) {
-							for (int k = 0;k<a[fi].length;k++){
+							for (int k = 0; k < a[fi].length; k++) {
 								c[fi][j] += a[fi][k] * r[j][k];
 							}
-			
+
 						}
 					}
 				});
 			}
 		} finally {
-
 			exec.shutdown();
 			while (!exec.isTerminated()) {
 			}
