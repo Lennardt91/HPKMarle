@@ -104,8 +104,8 @@ public class WRBMatrix {
 	public WRBMatrix matSeriell(WRBMatrix B) {
 		return MatrixCalculation.matSeriell(this, B);
 	}
-	public WRBMatrix matParallel1 (WRBMatrix B) {
-		return MatrixCalculation.matParallel1(this, B);
+	public WRBMatrix matParallelOwn1 (WRBMatrix B) {
+		return MatrixCalculation.matParallelOwn1(this, B);
 	}
 
 	/**
