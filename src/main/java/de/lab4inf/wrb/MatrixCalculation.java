@@ -23,7 +23,7 @@ public final class MatrixCalculation {
 	public static WRBMatrix transpose(WRBMatrix A) {
 		A.getMatrix();
 		double[][] c = new double[A.getColumnCount()][A.getRowCount()], a = A.getMatrix();
-		;
+		
 		for (int i = 0; i < A.getColumnCount(); i++) {
 			for (int j = 0; j < A.getRowCount(); j++) {
 				c[i][j] = a[j][i];
@@ -46,8 +46,8 @@ public final class MatrixCalculation {
 		matrixMulPossible(A, B);
 		double[][] a = A.getMatrix();
 		double[][] b = B.getMatrix();
-		double[][] c = new double[A.getColumnCount()][B.getRowCount()];
-		final int l = A.getColumnCount();
+		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
+		final int l = A.getRowCount();
 		for (int m = 0; m < l; m++) {
 			for (int n = 0; n < l; n++) {
 				for (int i = 0; i < c.length; i++) {
