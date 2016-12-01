@@ -107,6 +107,13 @@ public class WRBMatrix {
 	public WRBMatrix matParallelOwn1 (WRBMatrix B) {
 		return MatrixCalculation.matParallelOwn1(this, B);
 	}
+	/**
+	 * Gibt die Transponierte Matrix zurück
+	 * @return A^T
+	 */
+	public WRBMatrix transpose (){
+		return MatrixCalculation.transpose(this);
+	}
 
 	/**
 	 * Prueft 2 Matrizen auf Gleichheit
