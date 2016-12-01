@@ -54,7 +54,7 @@ public class WRBMatrixTest {
 		assertEquals(true, result.equals(C));
 	}
 	@Test
-	public void TestResult2x2Parallel1() {
+	public void TestResult2x2ParallelOwn1() {
 		double[][] a = new double[3][3];
 		double[][] b = new double[3][3];
 		double[][] c = new double[3][3];
@@ -86,7 +86,7 @@ public class WRBMatrixTest {
 		c[2][1] = 97;
 		c[2][2] = 83;
 		WRBMatrix A = new WRBMatrix(a), B = new WRBMatrix(b), C = new WRBMatrix(c), result;
-		result=A.matParallel1(B);
+		result=A.matParallelOwn1(B);
 		assertEquals(true, result.equals(C));
 	}
 	@Test(expected=IllegalArgumentException.class)
@@ -95,9 +95,9 @@ public class WRBMatrixTest {
 		C = A.matSeriell(B);
 	}
 	@Test(expected=IllegalArgumentException.class)
-	public void TestWrongDimensionParallel1(){
+	public void TestWrongDimensionParallelOwn1(){
 		WRBMatrix A = GenerateMatrix(4, 5),B = GenerateMatrix(4, 5),C = null;
-		C = A.matParallel1(B);
+		C = A.matParallelOwn1(B);
 	}
 	@Test(expected=IllegalArgumentException.class)
 	public void TestWrongDimension2Seriell(){
@@ -105,9 +105,9 @@ public class WRBMatrixTest {
 		C = A.matSeriell(B);
 	}
 	@Test(expected=IllegalArgumentException.class)
-	public void TestWrongDimension2Parallel1(){
+	public void TestWrongDimension2ParallelOwn1(){
 		WRBMatrix A = GenerateMatrix(1,1),B = GenerateMatrix(10,10),C =null;
-		C = A.matParallel1(B);
+		C = A.matParallelOwn1(B);
 	}
 	@Test
 	public void TimingTest(){
@@ -117,7 +117,7 @@ public class WRBMatrixTest {
 		HashMap<Integer, Long> serieltimes = new HashMap<>();
 		HashMap<Integer, Long> paralleltimes1 = new HashMap<>();
 		WRBMatrix a,b,c;
-		int maxsize = 1024;
+		int maxsize = 2048;
 		int scale = -(int) Math.pow(10, 6);
 		long time = 0;
 		for(int i = 64;i<2049;i*=2){
@@ -139,12 +139,12 @@ public class WRBMatrixTest {
 			a = A.get(i);
 			b = B.get(i);
 			time = System.nanoTime();
-			c = a.matParallel1(b);
+			c = a.matParallelOwn1(b);
 			time-= System.nanoTime();
 			assertEquals(true, c.equals(C.get(i)));
 			paralleltimes1.put(i, (time/scale));
 		}
-		Ausgabe(serieltimes,paralleltimes1,"paralel1");
+		Ausgabe(serieltimes,paralleltimes1,"paralel own 1");
 		
 		
 		
@@ -154,11 +154,12 @@ public class WRBMatrixTest {
 		int sice = (int) Math.pow(2,5+serieltime.size());
 		double speedup=0.;
 		for(int i = 64;i<=sice;i*=2){
-			speedup = ((1.0*paraltime.get(i))/serieltime.get(i));
+			speedup = ((1.0*serieltime.get(i))/paraltime.get(i));
 			//Auf 2 Nackommastellen bechränken
 			speedup = speedup * 100;
 			speedup = Math.round(speedup);
 			speedup = speedup / 100;
+			
 			if(serieltime.get(i)>9999 && paraltime.get(i)>9999){
 				format+="\n"+i+"\t\t|"+serieltime.get(i)+"ms\t|"+paraltime.get(i)+"ms\t|"+speedup;
 			}
