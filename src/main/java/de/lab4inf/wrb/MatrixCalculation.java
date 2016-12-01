@@ -120,6 +120,33 @@ public final class MatrixCalculation {
 		return new WRBMatrix(c);
 	}
 
+	public static WRBMatrix matParallel4(WRBMatrix A, WRBMatrix B) {
+		matrixMulPossible(A, B);
+		double[][] a = A.getMatrix(), b = B.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
+		ExecutorService exec = Executors.newFixedThreadPool(B.getColumnCount());
+		try {
+			for (int i = 0; i < A.getRowCount(); i++) {
+				final int fi = i;
+				exec.submit(new Runnable() {
+					@Override
+					public void run() {
+						for (int j = 0; j < B.getColumnCount(); j++) {
+							for (int k = 0; k < A.getColumnCount(); k++) {
+								c[fi][j] += a[fi][k] * b[k][j];
+							}
+						}
+
+					}
+				});
+			}
+		} finally {
+			exec.shutdown();
+			while (!exec.isTerminated()) {
+			}
+		}
+		return new WRBMatrix(c);
+	}
+
 	/**
 	 * Multipliziert 2 Matrizen parallel(Algorithmus 1 von Praktikumsaufgabe)
 	 * 
