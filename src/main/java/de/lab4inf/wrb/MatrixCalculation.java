@@ -44,7 +44,7 @@ public final class MatrixCalculation{
 	 * @return Ergebnis als WRBMatrix
 	 * @throws IllegalArgumentException
 	 */	
-	public static WRBMatrix matParallel1(WRBMatrix A, WRBMatrix B) throws IllegalArgumentException{
+	public static WRBMatrix matParallelOwn1(WRBMatrix A, WRBMatrix B) throws IllegalArgumentException{
 		if(A.getColumnCount() != B.getRowCount())
 			throw new IllegalArgumentException("Wrong matrix size. AColSize:" + A.getColumnCount() + " BRowSize:" + B.getRowCount());
 		
