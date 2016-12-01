@@ -236,14 +236,17 @@ public class WRBMatrixTest {
 		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
 		A.matSeriell(B);
 	}
+	@Test
 	public void TestDifferentDimensionParallel2(){
 		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
 		A.matParallel2(B);
 	}
+	@Test
 	public void TestDifferentDimensionParallel3(){
 		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
 		A.matParallel3(B);
 	}
+	@Test
 	public void TestDifferentDimensionParallel4(){
 		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
 		A.matParallel4(B);
