@@ -10,7 +10,22 @@ import java.util.concurrent.Executors;//.Executors;
  *
  */
 public final class MatrixCalculation{
-
+	/**
+	 * Transport eine Matrix
+	 * @param zu transponierende Matrix
+	 * @return transponierte Matrix
+	 */
+	public static WRBMatrix transpose(WRBMatrix A) {
+		A.getMatrix();		
+		double [][] c = new double[A.getColumnCount()][A.getRowCount()], a= A.getMatrix();;
+		for(int i = 0;i<A.getColumnCount();i++){
+			for (int j = 0;j<A.getRowCount();j++){
+				c[i][j]=a[j][i];
+			}
+		}
+		return new WRBMatrix(c);
+	}
+	
 	/**
 	 * Multipliziert 2 Matrizen parallel
 	 * @param A Erste WRBMatrix
