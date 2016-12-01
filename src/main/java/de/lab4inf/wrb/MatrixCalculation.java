@@ -1,10 +1,9 @@
 package de.lab4inf.wrb;
 
-import java.util.ArrayList;
+
 import java.util.concurrent.ExecutorService;
 
 import java.util.concurrent.Executors;//.Executors;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -48,7 +47,7 @@ public final class MatrixCalculation {
 		double[][] a = A.getMatrix();
 		double[][] b = B.getMatrix();
 		double[][] c = new double[A.getColumnCount()][B.getRowCount()];
-		int l = A.getColumnCount();
+		final int l = A.getColumnCount();
 		for (int m = 0; m < l; m++) {
 			for (int n = 0; n < l; n++) {
 				for (int i = 0; i < c.length; i++) {
@@ -63,16 +62,17 @@ public final class MatrixCalculation {
 	public static WRBMatrix matParallel2(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
 		double[][] a = A.getMatrix(), b = B.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
+		final int l = A.getColumnCount();
 		ExecutorService exec = Executors.newFixedThreadPool(B.getColumnCount());
 		try {
-			for (int i = 0; i < A.getRowCount(); i++) {
-				for (int j = 0; j < B.getColumnCount(); j++) {
+			for (int i = 0; i < l; i++) {
+				for (int j = 0; j < l; j++) {
 					final int fi = i;
 					final int fj = j;
 					exec.submit(new Runnable() {
 						@Override
 						public void run() {
-							for (int k = 0; k < A.getColumnCount(); k++) {
+							for (int k = 0; k < l; k++) {
 								c[fi][fj] += a[fi][k] * b[k][fj];
 							}
 						}
@@ -91,23 +91,23 @@ public final class MatrixCalculation {
 	public static WRBMatrix matParallel3(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
 		WRBMatrix R;
+		final int l = A.getColumnCount();
 		R = B.transpose();
 		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
 		ExecutorService exec = Executors.newFixedThreadPool(A.getRowCount());
 		try {
 
-			for (int i = 0; i < A.getRowCount(); i++) {
-				for (int j = 0; j < B.getColumnCount(); j++) {
+			for (int i = 0; i < l; i++) {
+				for (int j = 0; j < l; j++) {
 					final int fi = i;
 					final int fj = j;
 					exec.submit(new Runnable() {
 						@Override
 						public void run() {
 
-							for (int k = 0; k < a[fi].length; k++) {
+							for (int k = 0; k < l; k++) {
 								c[fi][fj] += a[fi][k] * r[fj][k];
 							}
-
 						}
 					});
 				}
