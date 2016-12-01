@@ -43,9 +43,7 @@ public final class MatrixCalculation {
 	 * @throws IllegalArgumentException
 	 */
 	public static WRBMatrix matSeriell(WRBMatrix A, WRBMatrix B) throws IllegalArgumentException {
-		if (A.getColumnCount() != B.getRowCount())
-			throw new IllegalArgumentException(
-					"Wrong matrix size. AColSize:" + A.getColumnCount() + " BRowSize:" + B.getRowCount());
+		matrixMulPossible(A, B);
 		double[][] a = A.getMatrix();
 		double[][] b = B.getMatrix();
 		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
@@ -60,7 +58,13 @@ public final class MatrixCalculation {
 		}
 		return new WRBMatrix(c);
 	}
-
+	public static WRBMatrix matParallel2(WRBMatrix A,WRBMatrix B){
+		matrixMulPossible(A, B);
+		//TODO: algorithmus
+		return null;
+	}
+	
+	
 	public static WRBMatrix matParallel3(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A,B);
 		WRBMatrix R;
@@ -104,10 +108,7 @@ public final class MatrixCalculation {
 	 * @throws IllegalArgumentException
 	 */
 	public static WRBMatrix matParallelOwn1(WRBMatrix A, WRBMatrix B) throws IllegalArgumentException {
-		if (A.getColumnCount() != B.getRowCount())
-			throw new IllegalArgumentException(
-					"Wrong matrix size. AColSize:" + A.getColumnCount() + " BRowSize:" + B.getRowCount());
-
+		matrixMulPossible(A, B);
 		double[][] a = A.getMatrix();
 		double[][] b = B.getMatrix();
 		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
