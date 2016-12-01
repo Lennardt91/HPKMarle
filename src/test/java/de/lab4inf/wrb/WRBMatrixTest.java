@@ -231,6 +231,23 @@ public class WRBMatrixTest {
 		result = A.matParallel4(B);
 		assertEquals(true, result.equals(C));
 	}
+	@Test
+	public void TestDifferentDimensionSeriell(){
+		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
+		A.matSeriell(B);
+	}
+	public void TestDifferentDimensionParallel2(){
+		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
+		A.matParallel2(B);
+	}
+	public void TestDifferentDimensionParallel3(){
+		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
+		A.matParallel3(B);
+	}
+	public void TestDifferentDimensionParallel4(){
+		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
+		A.matParallel4(B);
+	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void TestWrongDimensionSeriell() {
@@ -341,23 +358,23 @@ public class WRBMatrixTest {
 			a = A.get(i);
 			b = B.get(i);
 			time = System.nanoTime();
-			c = a.matParallelOwn1(b);
-			time -= System.nanoTime();
-			assertEquals(true, c.equals(C.get(i)));
-			paralleltimes.put(i, (time / scale));
-		}
-		Ausgabe(serieltimes, paralleltimes, "parallel own 1");
-
-		for (int i = 64; i <= maxsize; i *= 2) {
-			a = A.get(i);
-			b = B.get(i);
-			time = System.nanoTime();
 			c = a.matParallel4(b);
 			time -= System.nanoTime();
 			assertEquals(true, c.equals(C.get(i)));
 			paralleltimes.put(i, (time / scale));
 		}
 		Ausgabe(serieltimes, paralleltimes, "parallel 4");
+		
+		for (int i = 64; i <= maxsize; i *= 2) {
+			a = A.get(i);
+			b = B.get(i);
+			time = System.nanoTime();
+			c = a.matParallelOwn1(b);
+			time -= System.nanoTime();
+			assertEquals(true, c.equals(C.get(i)));
+			paralleltimes.put(i, (time / scale));
+		}
+		Ausgabe(serieltimes, paralleltimes, "parallel own 1");
 
 	}
 
