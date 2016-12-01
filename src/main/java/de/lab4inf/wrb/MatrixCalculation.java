@@ -3,6 +3,7 @@ package de.lab4inf.wrb;
 import java.util.concurrent.ExecutorService;
 
 import java.util.concurrent.Executors;//.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.sun.org.apache.xpath.internal.operations.Mult;
 
@@ -158,46 +159,51 @@ public final class MatrixCalculation {
 	 * @throws IllegalArgumentException
 	 */
 	public static WRBMatrix matParallelOwn1(WRBMatrix A, WRBMatrix B) throws IllegalArgumentException {
-		matrixMulPossible(A, B);
-		double[][] a = A.getMatrix();
-		double[][] b = B.getMatrix();
-		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
-
+		if(A.getColumnCount() != B.getRowCount())
+			throw new IllegalArgumentException("Wrong matrix size. AColSize:" + A.getColumnCount() + " BRowSize:" + B.getRowCount());
+		
+		double [][]a = A.getMatrix();
+		double [][]b = B.getMatrix();
+		double [][]c = new double [A.getRowCount()][B.getColumnCount()];
+		
 		final int NUM_CORES = Runtime.getRuntime().availableProcessors();
-
-		/*
-		 * //TODO: Noch keine parallele Ausfuehrung for (int i = 1;
-		 * i<A.getRowCount(); i++) for (int j = 1; j<B.getColumnCount(); j++)
-		 * for (int k = 1; k<A.getColumnCount(); k++) c[i][j] +=
-		 * a[i][k]*b[k][j];
-		 */
-
-		//////
-		ExecutorService exec = Executors.newFixedThreadPool(NUM_CORES * 2);// TODO:
-																			// Number
-																			// of
-																			// Threads
-																			// (100
-																			// momentan)
-																			// festlegen
-		try {
-			for (int i = 0; i < A.getRowCount(); i++) {
-				final int iFinal = i; // i muss final sein zum weiterbearbeiten
-				exec.submit(new Runnable() {
+		
+		ExecutorService exec = Executors.newFixedThreadPool(5000);//TODO: Number of Threads festlegen
+		ExecutorService exec2 = Executors.newFixedThreadPool(5000);//TODO: Number of Threads festlegen
+		
+		try{
+			for (int i = 0; i<A.getRowCount(); i++){
+				
+				final int iFinal = i; //i muss final sein zum weiterbearbeiten
+				exec.submit(new Runnable(){
 					@Override
-					public void run() {
-						for (int j = 0; j < B.getColumnCount(); j++)
-							for (int k = 0; k < A.getColumnCount(); k++)
-								c[iFinal][j] += a[iFinal][k] * b[k][j];
+					public void run(){
+					for (int j = 0; j<B.getColumnCount(); j++){
+						final int jFinal = j; //j muss final sein zum weiterbearbeiten
+						
+						exec2.submit(new Runnable(){
+							@Override
+							public void run(){
+								for (int k = 0; k<A.getColumnCount(); k++)
+									c[iFinal][jFinal] += a[iFinal][k]*b[k][jFinal];
+							}
+						});
+					}
 					}
 				});
 			}
 		} finally {
-			exec.shutdown();
-			while (!exec.isTerminated()) {
+			try {
+				exec.shutdown();
+				exec.awaitTermination((long)2 , TimeUnit.SECONDS);//Wartet bis die aussere Schleife alle Prozesse erstellt hat
+				exec2.shutdown();
+				exec2.awaitTermination((long)100 , TimeUnit.SECONDS);//Wartet bis die innere Schleife alle Ergebnisse hat
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		//////
+
 		return new WRBMatrix(c);
 	}
 
