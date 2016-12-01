@@ -27,8 +27,8 @@ public class WRBMatrix {
 	public WRBMatrix(double[][] matrix) {
 		this.matrix = matrix;
 		// Zeilen m und Spalten n bestimmen
-		this.m = matrix.length;
-		this.n = matrix[0].length;
+		this.m = matrix[0].length;
+		this.n = matrix.length;
 	}
 
 	/**

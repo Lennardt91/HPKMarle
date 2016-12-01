@@ -1,5 +1,6 @@
 package de.lab4inf.wrb;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
 import java.util.concurrent.Executors;//.Executors;
@@ -46,7 +47,7 @@ public final class MatrixCalculation {
 		matrixMulPossible(A, B);
 		double[][] a = A.getMatrix();
 		double[][] b = B.getMatrix();
-		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
+		double[][] c = new double[A.getColumnCount()][B.getRowCount()];
 		int l = A.getColumnCount();
 		for (int m = 0; m < l; m++) {
 			for (int n = 0; n < l; n++) {
@@ -122,8 +123,10 @@ public final class MatrixCalculation {
 
 	public static WRBMatrix matParallel4(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
-		double[][] a = A.getMatrix(), b = B.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
+		WRBMatrix R=B.transpose();
+		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
 		ExecutorService exec = Executors.newFixedThreadPool(B.getColumnCount());
+		
 		try {
 			for (int i = 0; i < A.getRowCount(); i++) {
 				final int fi = i;
@@ -132,7 +135,7 @@ public final class MatrixCalculation {
 					public void run() {
 						for (int j = 0; j < B.getColumnCount(); j++) {
 							for (int k = 0; k < A.getColumnCount(); k++) {
-								c[fi][j] += a[fi][k] * b[k][j];
+								c[fi][j] += a[fi][k] * r[j][k];
 							}
 						}
 
@@ -158,51 +161,32 @@ public final class MatrixCalculation {
 	 * @throws IllegalArgumentException
 	 */
 	public static WRBMatrix matParallelOwn1(WRBMatrix A, WRBMatrix B) throws IllegalArgumentException {
-		if(A.getColumnCount() != B.getRowCount())
-			throw new IllegalArgumentException("Wrong matrix size. AColSize:" + A.getColumnCount() + " BRowSize:" + B.getRowCount());
-		
-		double [][]a = A.getMatrix();
-		double [][]b = B.getMatrix();
-		double [][]c = new double [A.getRowCount()][B.getColumnCount()];
-		
+		matrixMulPossible(A, B);
+		double[][] a = A.getMatrix();
+		double[][] b = B.getMatrix();
+		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
+
 		final int NUM_CORES = Runtime.getRuntime().availableProcessors();
-		
-		ExecutorService exec = Executors.newFixedThreadPool(5000);//TODO: Number of Threads festlegen
-		ExecutorService exec2 = Executors.newFixedThreadPool(5000);//TODO: Number of Threads festlegen
-		
-		try{
-			for (int i = 0; i<A.getRowCount(); i++){
-				
-				final int iFinal = i; //i muss final sein zum weiterbearbeiten
-				exec.submit(new Runnable(){
+
+		ExecutorService exec = Executors.newFixedThreadPool(NUM_CORES * 2);
+		try {
+			for (int i = 0; i < A.getRowCount(); i++) {
+				final int iFinal = i; // i muss final sein zum weiterbearbeiten
+				exec.submit(new Runnable() {
 					@Override
-					public void run(){
-					for (int j = 0; j<B.getColumnCount(); j++){
-						final int jFinal = j; //j muss final sein zum weiterbearbeiten
-						
-						exec2.submit(new Runnable(){
-							@Override
-							public void run(){
-								for (int k = 0; k<A.getColumnCount(); k++)
-									c[iFinal][jFinal] += a[iFinal][k]*b[k][jFinal];
-							}
-						});
-					}
+					public void run() {
+						for (int j = 0; j < B.getColumnCount(); j++)
+							for (int k = 0; k < A.getColumnCount(); k++)
+								c[iFinal][j] += a[iFinal][k] * b[k][j];
 					}
 				});
 			}
 		} finally {
-			try {
-				exec.shutdown();
-				exec.awaitTermination((long)2 , TimeUnit.SECONDS);//Wartet bis die aussere Schleife alle Prozesse erstellt hat
-				exec2.shutdown();
-				exec2.awaitTermination((long)100 , TimeUnit.SECONDS);//Wartet bis die innere Schleife alle Ergebnisse hat
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			exec.shutdown();
+			while (!exec.isTerminated()) {
 			}
 		}
-
+		//////
 		return new WRBMatrix(c);
 	}
 
