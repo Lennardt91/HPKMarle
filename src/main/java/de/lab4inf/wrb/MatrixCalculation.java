@@ -5,7 +5,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;//.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.sun.org.apache.xpath.internal.operations.Mult;
 
 /**
  * Klasse fuer Berechnungen mit WRBMatrix Matrizen
