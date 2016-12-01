@@ -149,6 +149,7 @@ public class WRBMatrix {
 	 * @return true, wenn die Matrizen gleich sind, sonst false
 	 */
 	public boolean equals(WRBMatrix B) {
+		double eps = 1.E-8;
 		if (this.m != B.getRowCount())
 			return false;
 		if (this.n != B.getColumnCount())
@@ -156,10 +157,7 @@ public class WRBMatrix {
 		double[][] c = B.getMatrix();
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
-				if (this.matrix[i][j] != c[i][j]) {
-					// System.out.println("false");
-					// this.printMatr();
-					// B.printMatr();
+				if ((Math.abs(matrix[i][j] - c[i][j]))/c[i][j]>eps) {
 					return false;
 				}
 			}
