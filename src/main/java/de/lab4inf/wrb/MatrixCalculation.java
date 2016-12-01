@@ -65,17 +65,18 @@ public final class MatrixCalculation {
 		ExecutorService exec = Executors.newFixedThreadPool(B.getColumnCount());
 		try {
 			for (int i = 0; i < A.getRowCount(); i++) {
-				final int fi = i;
-				exec.submit(new Runnable() {
-					@Override
-					public void run() {
-						for (int j = 0; j < B.getColumnCount(); j++) {
+				for (int j = 0; j < B.getColumnCount(); j++) {
+					final int fi = i;
+					final int fj = j;
+					exec.submit(new Runnable() {
+						@Override
+						public void run() {
 							for (int k = 0; k < A.getColumnCount(); k++) {
-								c[fi][j] += a[fi][k] * b[k][j];
+								c[fi][fj] += a[fi][k] * b[k][fj];
 							}
 						}
-					}
-				});
+					});
+				}
 
 			}
 		} finally {
@@ -95,18 +96,20 @@ public final class MatrixCalculation {
 		try {
 
 			for (int i = 0; i < A.getRowCount(); i++) {
-				final int fi = i;
-				exec.submit(new Runnable() {
-					@Override
-					public void run() {
-						for (int j = 0; j < B.getColumnCount(); j++) {
+				for (int j = 0; j < B.getColumnCount(); j++) {
+					final int fi = i;
+					final int fj = j;
+					exec.submit(new Runnable() {
+						@Override
+						public void run() {
+
 							for (int k = 0; k < a[fi].length; k++) {
-								c[fi][j] += a[fi][k] * r[j][k];
+								c[fi][fj] += a[fi][k] * r[fj][k];
 							}
 
 						}
-					}
-				});
+					});
+				}
 			}
 		} finally {
 			exec.shutdown();
