@@ -16,7 +16,33 @@ public class WRBMatrixTest {
 		}
 		return new WRBMatrix(a);
 	}
-
+	
+	@Test
+	public void TestTranspose(){
+		double[][] a = new double[3][3];
+		double[][] c = new double[3][3];
+		a[0][0] = 3;
+		a[0][1] = 5;
+		a[0][2] = 7;
+		a[1][0] = 2;
+		a[1][1] = 6;
+		a[1][2] = 5;
+		a[2][0] = 9;
+		a[2][1] = 8;
+		a[2][2] = 4;
+		c[0][0] = 3;
+		c[0][1] = 2;
+		c[0][2] = 9;
+		c[1][0] = 5;
+		c[1][1] = 6;
+		c[1][2] = 8;
+		c[2][0] = 7;
+		c[2][1] = 5;
+		c[2][2] = 4;
+		WRBMatrix A= new WRBMatrix(a), C=new WRBMatrix(c),result;
+		result = A.transpose();
+		assertEquals(true, C.equals(result));
+	}
 	@Test
 	public void TestResult2x2Seriell() {
 		double[][] a = new double[3][3];
@@ -117,7 +143,7 @@ public class WRBMatrixTest {
 		HashMap<Integer, Long> serieltimes = new HashMap<>();
 		HashMap<Integer, Long> paralleltimes1 = new HashMap<>();
 		WRBMatrix a,b,c;
-		int maxsize = 2048;
+		int maxsize = 256;
 		int scale = -(int) Math.pow(10, 6);
 		long time = 0;
 		for(int i = 64;i<2049;i*=2){
