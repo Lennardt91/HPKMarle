@@ -128,6 +128,9 @@ public class WRBMatrix {
 	public WRBMatrix matParallel3(WRBMatrix B) {
 		return MatrixCalculation.matParallel3(this, B);
 	}
+	public WRBMatrix matParallel4(WRBMatrix B) {
+		return MatrixCalculation.matParallel4(this, B);
+	}
 
 	/**
 	 * Gibt die Transponierte Matrix zurück
