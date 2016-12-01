@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class WRBMatrixTest {
 	// Maximale Größe der Matrix beim Timing Test
-	int maxsize = 2048;
+	int maxsize = 5096;
 
 	public WRBMatrix GenerateMatrix(int m, int n) {
 		double[][] a = new double[m][n];
@@ -253,7 +253,7 @@ public class WRBMatrixTest {
 		WRBMatrix a, b, c;
 		int scale = -(int) Math.pow(10, 6);
 		long time = 0;
-		for (int i = 64; i < 2049; i *= 2) {
+		for (int i = 64; i < maxsize; i *= 2) {
 			A.put(i, GenerateMatrix(i, i));
 			B.put(i, GenerateMatrix(i, i));
 		}
