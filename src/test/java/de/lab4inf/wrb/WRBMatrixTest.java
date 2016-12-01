@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class WRBMatrixTest {
 	// Maximale Größe der Matrix beim Timing Test
-	int maxsize = 1024;
+	int maxsize = 2048;
 
 	public WRBMatrix GenerateMatrix(int m, int n) {
 		double[][] a = new double[m][n];
@@ -194,6 +194,43 @@ public class WRBMatrixTest {
 		result = A.matParallel3(B);
 		assertEquals(true, result.equals(C));
 	}
+	
+	@Test
+	public void TestResult2x2Rapallel4() {
+		double[][] a = new double[3][3];
+		double[][] b = new double[3][3];
+		double[][] c = new double[3][3];
+		a[0][0] = 3;
+		a[0][1] = 5;
+		a[0][2] = 7;
+		a[1][0] = 2;
+		a[1][1] = 6;
+		a[1][2] = 5;
+		a[2][0] = 9;
+		a[2][1] = 8;
+		a[2][2] = 4;
+		b[0][0] = 2;
+		b[0][1] = 5;
+		b[0][2] = 7;
+		b[1][0] = 3;
+		b[1][1] = 4;
+		b[1][2] = 2;
+		b[2][0] = 9;
+		b[2][1] = 5;
+		b[2][2] = 1;
+		c[0][0] = 84;
+		c[0][1] = 70;
+		c[0][2] = 38;
+		c[1][0] = 67;
+		c[1][1] = 59;
+		c[1][2] = 31;
+		c[2][0] = 78;
+		c[2][1] = 97;
+		c[2][2] = 83;
+		WRBMatrix A = new WRBMatrix(a), B = new WRBMatrix(b), C = new WRBMatrix(c), result;
+		result = A.matParallel4(B);
+		assertEquals(true, result.equals(C));
+	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void TestWrongDimensionSeriell() {
@@ -217,6 +254,11 @@ public class WRBMatrixTest {
 	public void TestWrongDimensionParallel3() {
 		WRBMatrix A = GenerateMatrix(4, 5), B = GenerateMatrix(4, 5), C = null;
 		C = A.matParallel3(B);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void TestWrongDimensionParallel4() {
+		WRBMatrix A = GenerateMatrix(4, 5), B = GenerateMatrix(4, 5), C = null;
+		C = A.matParallel4(B);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -243,6 +285,11 @@ public class WRBMatrixTest {
 		C = A.matParallel3(B);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void TestWrongDimension2Parallel4() {
+		WRBMatrix A = GenerateMatrix(1, 1), B = GenerateMatrix(10, 10), C = null;
+		C = A.matParallel4(B);
+	}
 	@Test
 	public void TimingTest() {
 		HashMap<Integer, WRBMatrix> A = new HashMap<>();
@@ -300,6 +347,17 @@ public class WRBMatrixTest {
 			paralleltimes.put(i, (time / scale));
 		}
 		Ausgabe(serieltimes, paralleltimes, "parallel own 1");
+
+		for (int i = 64; i <= maxsize; i *= 2) {
+			a = A.get(i);
+			b = B.get(i);
+			time = System.nanoTime();
+			c = a.matParallel4(b);
+			time -= System.nanoTime();
+			assertEquals(true, c.equals(C.get(i)));
+			paralleltimes.put(i, (time / scale));
+		}
+		Ausgabe(serieltimes, paralleltimes, "parallel 4");
 
 	}
 
