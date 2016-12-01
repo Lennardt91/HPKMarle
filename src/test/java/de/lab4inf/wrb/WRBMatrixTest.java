@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class WRBMatrixTest {
 	// Maximale Größe der Matrix beim Timing Test
-	int maxsize = 5096;
+	int maxsize = 1024;
 
 	public WRBMatrix GenerateMatrix(int m, int n) {
 		double[][] a = new double[m][n];
@@ -253,7 +253,7 @@ public class WRBMatrixTest {
 		WRBMatrix a, b, c;
 		int scale = -(int) Math.pow(10, 6);
 		long time = 0;
-		for (int i = 64; i < maxsize; i *= 2) {
+		for (int i = 64; i <= maxsize; i *= 2) {
 			A.put(i, GenerateMatrix(i, i));
 			B.put(i, GenerateMatrix(i, i));
 		}
@@ -277,7 +277,7 @@ public class WRBMatrixTest {
 			assertEquals(true, c.equals(C.get(i)));
 			paralleltimes.put(i, (time / scale));
 		}
-		Ausgabe(serieltimes, paralleltimes, "paralel 2");
+		Ausgabe(serieltimes, paralleltimes, "parallel 2");
 
 		for (int i = 64; i <= maxsize; i *= 2) {
 			a = A.get(i);
@@ -288,7 +288,7 @@ public class WRBMatrixTest {
 			assertEquals(true, c.equals(C.get(i)));
 			paralleltimes.put(i, (time / scale));
 		}
-		Ausgabe(serieltimes, paralleltimes, "paralel 3");
+		Ausgabe(serieltimes, paralleltimes, "parallel 3");
 
 		for (int i = 64; i <= maxsize; i *= 2) {
 			a = A.get(i);
@@ -299,12 +299,12 @@ public class WRBMatrixTest {
 			assertEquals(true, c.equals(C.get(i)));
 			paralleltimes.put(i, (time / scale));
 		}
-		Ausgabe(serieltimes, paralleltimes, "paralel own 1");
+		Ausgabe(serieltimes, paralleltimes, "parallel own 1");
 
 	}
 
 	public void Ausgabe(HashMap<Integer, Long> serieltime, HashMap<Integer, Long> paraltime, String name) {
-		String format = name + "\nn\t\t|t seq\t\t|t para\t\t|s(n)";
+		String format = name + "\nn\t\t|t seq\t\t|t para\t\t|s(n)\n_______________________________________________________";
 		int sice = (int) Math.pow(2, 5 + serieltime.size());
 		double speedup = 0.;
 		for (int i = 64; i <= sice; i *= 2) {
@@ -324,7 +324,7 @@ public class WRBMatrixTest {
 				format += "\n" + i + "\t\t|" + serieltime.get(i) + "ms\t\t|" + paraltime.get(i) + "ms\t\t|" + speedup;
 			}
 		}
-		System.out.println(format);
+		System.out.println(format+"\n\n");
 
 	}
 
