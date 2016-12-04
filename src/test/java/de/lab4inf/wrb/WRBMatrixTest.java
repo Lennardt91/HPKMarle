@@ -148,7 +148,7 @@ public class WRBMatrixTest {
 	}
 
 	@Test
-	public void TestResult2x2Rapallel2() {
+	public void TestResult2x2Parallel2() {
 		double[][] a = new double[3][3];
 		double[][] b = new double[3][3];
 		double[][] c = new double[3][3];
@@ -185,7 +185,7 @@ public class WRBMatrixTest {
 	}
 
 	@Test
-	public void TestResult2x2Rapallel3() {
+	public void TestResult2x2Parallel3() {
 		double[][] a = new double[3][3];
 		double[][] b = new double[3][3];
 		double[][] c = new double[3][3];
@@ -222,7 +222,7 @@ public class WRBMatrixTest {
 	}
 	
 	@Test
-	public void TestResult2x2Rapallel4() {
+	public void TestResult2x2Parallel4() {
 		double[][] a = new double[3][3];
 		double[][] b = new double[3][3];
 		double[][] c = new double[3][3];
@@ -259,12 +259,13 @@ public class WRBMatrixTest {
 	}
 	@Test
 	public void TestDifferentDimensionSeriell(){
-		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
+		WRBMatrix A = GenerateMatrix(2, 3),B = GenerateMatrix(3, 4);
 		A.matSeriell(B);
+		
 	}
 	@Test
 	public void TestDifferentDimensionParallel2(){
-		WRBMatrix A = GenerateMatrix(5, 6),B = GenerateMatrix(6, 5);
+		WRBMatrix A = GenerateMatrix(2, 3),B = GenerateMatrix(3, 5);
 		A.matParallel2(B);
 	}
 	@Test
