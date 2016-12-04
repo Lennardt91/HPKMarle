@@ -70,7 +70,7 @@ public final class MatrixCalculation {
 		final int l = A.getRowCount();
 		final int n = B.getColumnCount();
 		
-		ExecutorService exec = Executors.newFixedThreadPool(20);
+		ExecutorService exec = Executors.newFixedThreadPool(100);
 		Stack<Runnable> runnablestack = new Stack<Runnable>();
 		Stack<Future<?>> futureStack = new Stack<Future<?>>();
 		Future<?> future;
@@ -105,7 +105,7 @@ public final class MatrixCalculation {
 					futureStack.push(   exec.submit(runnable = (Runnable) runnablestack.pop())      );
 				} catch (OutOfMemoryError e){
 					try {
-						Thread.sleep(10);
+						Thread.sleep(5);
 						
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
@@ -132,31 +132,59 @@ public final class MatrixCalculation {
 		final int n = B.getColumnCount();
 		R = B.transpose();
 		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
-		ExecutorService exec = Executors.newFixedThreadPool(A.getRowCount());
-		try {
+		//ExecutorService exec = Executors.newFixedThreadPool(A.getRowCount());
+		
+		ExecutorService exec = Executors.newFixedThreadPool(100);
+		Stack<Runnable> runnablestack = new Stack<Runnable>();
+		Stack<Future<?>> futureStack = new Stack<Future<?>>();
+		Future<?> future;
+		Runnable runnable = new Runnable(){
+			@Override
+			public void run(){}
+		};
+		
+		
 
-			for (int i = 0; i < l; i++) {
-				for (int j = 0; j < n; j++) {
-					final int fi = i;
-					final int fj = j;
-					
-					exec.submit(new Runnable() {
-						@Override
-						public void run() {
-
-							for (int k = 0; k < l; k++) {
-								c[fi][fj] += a[fi][k] * r[fj][k];
+		for (int i = 0; i < l; i++) {
+			for (int j = 0; j < n; j++) {
+				final int fi = i;
+				final int fj = j;
+				runnablestack.push(
+						new Runnable() {
+							@Override
+							public void run() {
+								for (int k = 0; k < n; k++) {
+									c[fi][fj] += a[fi][k] * r[fj][k];
+								}
 							}
 						}
-					});
+				);
+				
+				
+				
+			}
+		}
+		
+		while(!runnablestack.isEmpty()){
+			try{
+				futureStack.push(   exec.submit(runnable = (Runnable) runnablestack.pop())      );
+			} catch (OutOfMemoryError e){
+				try {
+					Thread.sleep(5);
+					
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} finally{
+					exec.submit(runnable);
 				}
 			}
 		}
-		finally {
-			exec.shutdown();
-			while (!exec.isTerminated()) {
-			}
-
+		while (!futureStack.empty()) {
+			
+			if ( !((future = futureStack.pop()).isDone()) )
+				futureStack.push(future);
+			
 		}
 		return new WRBMatrix(c);
 	}
@@ -165,12 +193,21 @@ public final class MatrixCalculation {
 		matrixMulPossible(A, B);
 		WRBMatrix R=B.transpose();
 		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
-		ExecutorService exec = Executors.newFixedThreadPool(B.getColumnCount());
+		//ExecutorService exec = Executors.newFixedThreadPool(B.getColumnCount());
 		
-		try {
+		ExecutorService exec = Executors.newFixedThreadPool(100);
+		Stack<Runnable> runnablestack = new Stack<Runnable>();
+		Stack<Future<?>> futureStack = new Stack<Future<?>>();
+		Future<?> future;
+		Runnable runnable = new Runnable(){
+			@Override
+			public void run(){}
+		};
+		
+		
 			for (int i = 0; i < A.getRowCount(); i++) {
 				final int fi = i;
-				exec.submit(new Runnable() {
+				runnablestack.push(new Runnable() {
 					@Override
 					public void run() {
 						for (int j = 0; j < B.getColumnCount(); j++) {
@@ -182,11 +219,27 @@ public final class MatrixCalculation {
 					}
 				});
 			}
-		} finally {
-			exec.shutdown();
-			while (!exec.isTerminated()) {
+			while(!runnablestack.isEmpty()){
+				try{
+					futureStack.push(   exec.submit(runnable = (Runnable) runnablestack.pop())      );
+				} catch (OutOfMemoryError e){
+					try {
+						Thread.sleep(5);
+						
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} finally{
+						exec.submit(runnable);
+					}
+				}
 			}
-		}
+			while (!futureStack.empty()) {
+				
+				if ( !((future = futureStack.pop()).isDone()) )
+					futureStack.push(future);
+				
+			}
 		return new WRBMatrix(c);
 	}
 
