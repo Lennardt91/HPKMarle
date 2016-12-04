@@ -10,12 +10,12 @@ import java.util.HashMap;
  */
 public class WRBMatrix {
 
-	int m; // Anzahl Zeilen der Matrix
-	int n; // Anzahl Spalten der Matrix
-	double[][] matrix; // Matrix als 2 dimensionales Array
-	private int maxFieldValue = 1000; // Maximaler und minimaler Wert, den ein
+	volatile int m; // Anzahl Zeilen der Matrix
+	volatile int n; // Anzahl Spalten der Matrix
+	volatile double[][] matrix; // Matrix als 2 dimensionales Array
+	private static int maxFieldValue = 1000; // Maximaler und minimaler Wert, den ein
 										// Feld der Matrix annehmen kann
-	private int maxRowOrColSizeValue = 5; // Maximaler Wert den eine Reihe oder
+	private static int maxRowOrColSizeValue = 5; // Maximaler Wert den eine Reihe oder
 											// Spalte annehmen kann
 
 	/**
