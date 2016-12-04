@@ -1,9 +1,13 @@
 package de.lab4inf.wrb;
 
 
+import java.util.Stack;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 import java.util.concurrent.Executors;//.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 
 
 /**
@@ -48,10 +52,11 @@ public final class MatrixCalculation {
 		double[][] b = B.getMatrix();
 		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
 		final int l = A.getRowCount();
-		for (int m = 0; m < l; m++) {
-			for (int n = 0; n < l; n++) {
-				for (int i = 0; i < c.length; i++) {
-					c[m][n] += a[m][i] * b[i][n];
+		final int n = B.getColumnCount();
+		for (int x = 0; x < l; x++) {
+			for (int y = 0; y < n; y++) {
+				for (int z = 0; z < l; z++) {
+					c[x][y] += a[x][z] * b[z][y];
 				}
 			}
 
@@ -62,45 +67,79 @@ public final class MatrixCalculation {
 	public static WRBMatrix matParallel2(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
 		double[][] a = A.getMatrix(), b = B.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
-		final int l = A.getColumnCount();
-		ExecutorService exec = Executors.newFixedThreadPool(B.getColumnCount());
-		try {
+		final int l = A.getRowCount();
+		final int n = B.getColumnCount();
+		
+		ExecutorService exec = Executors.newFixedThreadPool(20);
+		Stack<Runnable> runnablestack = new Stack<Runnable>();
+		Stack<Future<?>> futureStack = new Stack<Future<?>>();
+		Future<?> future;
+		Runnable runnable = new Runnable(){
+			@Override
+			public void run(){}
+		};
+		
+		
 			for (int i = 0; i < l; i++) {
-				for (int j = 0; j < l; j++) {
+				for (int j = 0; j < n; j++) {
 					final int fi = i;
 					final int fj = j;
-					exec.submit(new Runnable() {
-						@Override
-						public void run() {
-							for (int k = 0; k < l; k++) {
-								c[fi][fj] += a[fi][k] * b[k][fj];
+					runnablestack.push(
+							new Runnable() {
+								@Override
+								public void run() {
+									for (int k = 0; k < n; k++) {
+										c[fi][fj] += a[fi][k] * b[k][fj];
+									}
+								}
 							}
-						}
-					});
+					);
 				}
+				
 
 			}
-		} finally {
-			exec.shutdown();
-			while (!exec.isTerminated()) {
+			
+		
+			while(!runnablestack.isEmpty()){
+				try{
+					futureStack.push(   exec.submit(runnable = (Runnable) runnablestack.pop())      );
+				} catch (OutOfMemoryError e){
+					try {
+						Thread.sleep(10);
+						
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} finally{
+						exec.submit(runnable);
+					}
+				}
 			}
-		}
+			while (!futureStack.empty()) {
+				
+				if ( !((future = futureStack.pop()).isDone()) )
+					futureStack.push(future);
+				
+			}
+		
 		return new WRBMatrix(c);
 	}
 
 	public static WRBMatrix matParallel3(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
 		WRBMatrix R;
-		final int l = A.getColumnCount();
+		final int l = A.getRowCount();
+		final int n = B.getColumnCount();
 		R = B.transpose();
 		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
 		ExecutorService exec = Executors.newFixedThreadPool(A.getRowCount());
 		try {
 
 			for (int i = 0; i < l; i++) {
-				for (int j = 0; j < l; j++) {
+				for (int j = 0; j < n; j++) {
 					final int fi = i;
 					final int fj = j;
+					
 					exec.submit(new Runnable() {
 						@Override
 						public void run() {
@@ -112,7 +151,8 @@ public final class MatrixCalculation {
 					});
 				}
 			}
-		} finally {
+		}
+		finally {
 			exec.shutdown();
 			while (!exec.isTerminated()) {
 			}
@@ -165,7 +205,6 @@ public final class MatrixCalculation {
 		double[][] a = A.getMatrix();
 		double[][] b = B.getMatrix();
 		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
-
 		final int NUM_CORES = Runtime.getRuntime().availableProcessors();
 
 		ExecutorService exec = Executors.newFixedThreadPool(NUM_CORES * 2);
