@@ -1,6 +1,5 @@
 package de.lab4inf.wrb;
 
-import java.util.HashMap;
 
 /**
  * Mathematische Matrix
@@ -13,6 +12,9 @@ public class WRBMatrix {
 	volatile int m; // Anzahl Zeilen der Matrix
 	volatile int n; // Anzahl Spalten der Matrix
 	volatile double[][] matrix; // Matrix als 2 dimensionales Array
+	
+	
+	
 	private static int maxFieldValue = 1000; // Maximaler und minimaler Wert, den ein
 										// Feld der Matrix annehmen kann
 	private static int maxRowOrColSizeValue = 5; // Maximaler Wert den eine Reihe oder
@@ -30,6 +32,7 @@ public class WRBMatrix {
 		this.n = matrix[0].length;
 		this.m = matrix.length;
 	}
+	
 
 	/**
 	 * Konstruktor fuer random Matrix in gewuenschter Groesse

@@ -1,15 +1,6 @@
 package de.lab4inf.wrb;
 
 
-import java.util.Stack;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-
-import java.util.concurrent.Executors;//.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.RejectedExecutionException;
-
-
 /**
  * Klasse fuer Berechnungen mit WRBMatrix Matrizen
  * 
@@ -17,6 +8,7 @@ import java.util.concurrent.RejectedExecutionException;
  *
  */
 public final class MatrixCalculation {
+	
 	/**
 	 * Transport eine Matrix
 	 * 
@@ -70,21 +62,13 @@ public final class MatrixCalculation {
 		final int l = A.getRowCount();
 		final int n = B.getColumnCount();
 		
-		ExecutorService exec = Executors.newFixedThreadPool(100);
-		Stack<Runnable> runnablestack = new Stack<Runnable>();
-		Stack<Future<?>> futureStack = new Stack<Future<?>>();
-		Future<?> future;
-		Runnable runnable = new Runnable(){
-			@Override
-			public void run(){}
-		};
-		
+		WRBTaskObserver taskObs = new WRBTaskObserver();
 		
 			for (int i = 0; i < l; i++) {
 				for (int j = 0; j < n; j++) {
 					final int fi = i;
 					final int fj = j;
-					runnablestack.push(
+					taskObs.doRunnable(
 							new Runnable() {
 								@Override
 								public void run() {
@@ -99,31 +83,12 @@ public final class MatrixCalculation {
 
 			}
 			
-		
-			while(!runnablestack.isEmpty()){
-				try{
-					futureStack.push(   exec.submit(runnable = (Runnable) runnablestack.pop())      );
-				} catch (OutOfMemoryError e){
-					try {
-						Thread.sleep(5);
-						
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} finally{
-						exec.submit(runnable);
-					}
-				}
-			}
-			while (!futureStack.empty()) {
-				
-				if ( !((future = futureStack.pop()).isDone()) )
-					futureStack.push(future);
-				
-			}
-		
+		taskObs.waitAllDone();
+		taskObs.shutdownNow();
 		return new WRBMatrix(c);
 	}
+	
+
 
 	public static WRBMatrix matParallel3(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
@@ -132,16 +97,8 @@ public final class MatrixCalculation {
 		final int n = B.getColumnCount();
 		R = B.transpose();
 		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
-		//ExecutorService exec = Executors.newFixedThreadPool(A.getRowCount());
-		
-		ExecutorService exec = Executors.newFixedThreadPool(100);
-		Stack<Runnable> runnablestack = new Stack<Runnable>();
-		Stack<Future<?>> futureStack = new Stack<Future<?>>();
-		Future<?> future;
-		Runnable runnable = new Runnable(){
-			@Override
-			public void run(){}
-		};
+		WRBTaskObserver taskObs = new WRBTaskObserver();
+
 		
 		
 
@@ -149,7 +106,7 @@ public final class MatrixCalculation {
 			for (int j = 0; j < n; j++) {
 				final int fi = i;
 				final int fj = j;
-				runnablestack.push(
+				taskObs.doRunnable(
 						new Runnable() {
 							@Override
 							public void run() {
@@ -165,27 +122,8 @@ public final class MatrixCalculation {
 			}
 		}
 		
-		while(!runnablestack.isEmpty()){
-			try{
-				futureStack.push(   exec.submit(runnable = (Runnable) runnablestack.pop())      );
-			} catch (OutOfMemoryError e){
-				try {
-					Thread.sleep(5);
-					
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} finally{
-					exec.submit(runnable);
-				}
-			}
-		}
-		while (!futureStack.empty()) {
-			
-			if ( !((future = futureStack.pop()).isDone()) )
-				futureStack.push(future);
-			
-		}
+		taskObs.waitAllDone();
+		taskObs.shutdownNow();
 		return new WRBMatrix(c);
 	}
 
@@ -193,21 +131,11 @@ public final class MatrixCalculation {
 		matrixMulPossible(A, B);
 		WRBMatrix R=B.transpose();
 		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
-		//ExecutorService exec = Executors.newFixedThreadPool(B.getColumnCount());
-		
-		ExecutorService exec = Executors.newFixedThreadPool(100);
-		Stack<Runnable> runnablestack = new Stack<Runnable>();
-		Stack<Future<?>> futureStack = new Stack<Future<?>>();
-		Future<?> future;
-		Runnable runnable = new Runnable(){
-			@Override
-			public void run(){}
-		};
-		
+		WRBTaskObserver taskObs = new WRBTaskObserver();
 		
 			for (int i = 0; i < A.getRowCount(); i++) {
 				final int fi = i;
-				runnablestack.push(new Runnable() {
+				taskObs.doRunnable(new Runnable() {
 					@Override
 					public void run() {
 						for (int j = 0; j < B.getColumnCount(); j++) {
@@ -219,27 +147,8 @@ public final class MatrixCalculation {
 					}
 				});
 			}
-			while(!runnablestack.isEmpty()){
-				try{
-					futureStack.push(   exec.submit(runnable = (Runnable) runnablestack.pop())      );
-				} catch (OutOfMemoryError e){
-					try {
-						Thread.sleep(5);
-						
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} finally{
-						exec.submit(runnable);
-					}
-				}
-			}
-			while (!futureStack.empty()) {
-				
-				if ( !((future = futureStack.pop()).isDone()) )
-					futureStack.push(future);
-				
-			}
+		taskObs.waitAllDone();
+		taskObs.shutdownNow();	
 		return new WRBMatrix(c);
 	}
 
@@ -258,13 +167,11 @@ public final class MatrixCalculation {
 		double[][] a = A.getMatrix();
 		double[][] b = B.getMatrix();
 		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
-		final int NUM_CORES = Runtime.getRuntime().availableProcessors();
-
-		ExecutorService exec = Executors.newFixedThreadPool(NUM_CORES * 2);
-		try {
-			for (int i = 0; i < A.getRowCount(); i++) {
+		WRBTaskObserver taskObs = new WRBTaskObserver();
+		
+		for (int i = 0; i < A.getRowCount(); i++) {
 				final int iFinal = i; // i muss final sein zum weiterbearbeiten
-				exec.submit(new Runnable() {
+				taskObs.doRunnable(new Runnable() {
 					@Override
 					public void run() {
 						for (int j = 0; j < B.getColumnCount(); j++)
@@ -273,12 +180,9 @@ public final class MatrixCalculation {
 					}
 				});
 			}
-		} finally {
-			exec.shutdown();
-			while (!exec.isTerminated()) {
-			}
-		}
-		//////
+		
+		taskObs.waitAllDone();
+		taskObs.shutdownNow();
 		return new WRBMatrix(c);
 	}
 
@@ -292,7 +196,7 @@ public final class MatrixCalculation {
 	 *            Letzte zu multiplizierende Matrix
 	 * @return true, falls eine multiplikation moeglich ist
 	 * @throws IllegalArgumentException
-	 *             falls keine multiplikation moeglich ist
+	 *
 	 */
 	public static boolean matrixMulPossible(WRBMatrix A, WRBMatrix B) throws IllegalArgumentException {
 		if (A.getColumnCount() == B.getRowCount())
