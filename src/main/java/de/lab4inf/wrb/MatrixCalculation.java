@@ -55,7 +55,17 @@ public final class MatrixCalculation {
 		}
 		return new WRBMatrix(c);
 	}
-
+	
+	/**
+	 * Multipliziert 2 Matrizen parallel(Algorithmus 2 von Praktikumsaufgabe)
+	 * 
+	 * @param A
+	 *            Erste WRBMatrix
+	 * @param B
+	 *            Zweite WRBMatrix
+	 * @return Ergebnis als WRBMatrix
+	 * @throws IllegalArgumentException
+	 */
 	public static WRBMatrix matParallel2(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
 		double[][] a = A.getMatrix(), b = B.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
@@ -84,12 +94,21 @@ public final class MatrixCalculation {
 			}
 			
 		taskObs.waitAllDone();
-		taskObs.shutdownNow();
+		//taskObs.shutdownNow();
 		return new WRBMatrix(c);
 	}
 	
 
-
+	/**
+	 * Multipliziert 2 Matrizen parallel(Algorithmus 3 von Praktikumsaufgabe)
+	 * 
+	 * @param A
+	 *            Erste WRBMatrix
+	 * @param B
+	 *            Zweite WRBMatrix
+	 * @return Ergebnis als WRBMatrix
+	 * @throws IllegalArgumentException
+	 */
 	public static WRBMatrix matParallel3(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
 		WRBMatrix R;
@@ -123,10 +142,20 @@ public final class MatrixCalculation {
 		}
 		
 		taskObs.waitAllDone();
-		taskObs.shutdownNow();
+		//taskObs.shutdownNow();
 		return new WRBMatrix(c);
 	}
-
+	
+	/**
+	 * Multipliziert 2 Matrizen parallel(Algorithmus 4 von Praktikumsaufgabe)
+	 * 
+	 * @param A
+	 *            Erste WRBMatrix
+	 * @param B
+	 *            Zweite WRBMatrix
+	 * @return Ergebnis als WRBMatrix
+	 * @throws IllegalArgumentException
+	 */
 	public static WRBMatrix matParallel4(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
 		WRBMatrix R=B.transpose();
@@ -148,12 +177,12 @@ public final class MatrixCalculation {
 				});
 			}
 		taskObs.waitAllDone();
-		taskObs.shutdownNow();	
+		//taskObs.shutdownNow();	
 		return new WRBMatrix(c);
 	}
 
 	/**
-	 * Multipliziert 2 Matrizen parallel(Algorithmus 1 von Praktikumsaufgabe)
+	 * Multipliziert 2 Matrizen parallel
 	 * 
 	 * @param A
 	 *            Erste WRBMatrix
@@ -174,15 +203,24 @@ public final class MatrixCalculation {
 				taskObs.doRunnable(new Runnable() {
 					@Override
 					public void run() {
-						for (int j = 0; j < B.getColumnCount(); j++)
-							for (int k = 0; k < A.getColumnCount(); k++)
-								c[iFinal][j] += a[iFinal][k] * b[k][j];
+						for (int j = 0; j < B.getColumnCount(); j++){
+							final int jFinal = j;
+							taskObs.doRunnable(new Runnable() {
+								@Override
+								public void run() {
+									for (int k = 0; k < A.getColumnCount(); k++)
+										c[iFinal][jFinal] += a[iFinal][k] * b[k][jFinal];
+								}
+							});
+						}
+							
+							
 					}
 				});
 			}
 		
 		taskObs.waitAllDone();
-		taskObs.shutdownNow();
+		//taskObs.shutdownNow();
 		return new WRBMatrix(c);
 	}
 
