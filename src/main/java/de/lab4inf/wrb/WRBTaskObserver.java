@@ -28,6 +28,7 @@ public class WRBTaskObserver {
 	public void shutdownNow(){
 		exec.shutdownNow();
 	}
+	
 	/**
 	 * Uebergibt eine Variable an den ExecutorService und wartet, falls dieser noch beschaeftigt ist
 	 * @param runnable Runnable die sofort ausgefuehrt werden soll
