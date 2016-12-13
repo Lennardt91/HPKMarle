@@ -3,7 +3,6 @@ package de.lab4inf.wrb;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.antlr.runtime.RecognitionException;
 import org.junit.Before;
 import org.junit.Test;
 
