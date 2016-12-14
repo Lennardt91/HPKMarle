@@ -81,6 +81,59 @@
 				<configuration>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<!-- trigger javah -->
+					<javahOS>hp-ux</javahOS>
+
+					<compilerProvider>generic-classic</compilerProvider>
+					<compilerExecutable>cc</compilerExecutable>
+
+					<linkerExecutable>cc</linkerExecutable>
+					<sources>
+						<source>
+							<directory>${basedir}/src/main/cpp</directory>
+							<fileNames>
+								<fileName>Differentiator.cpp </fileName>
+							</fileNames>
+						</source>
+					</sources>
+
+					<compilerStartOptions>
+						<compilerStartOption>+z +u4 -c -mt</compilerStartOption>
+					</compilerStartOptions>
+
+					<linkerStartOptions>
+						<linkerStartOption>-b -lstd -lstream -lCsup -lunwind -lm</linkerStartOption>
+					</linkerStartOptions>
+
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>javah</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<javahOS>hp-ux</javahOS>
+							<javahProvider>default</javahProvider>
+							<javahOutputDirectory>${basedir}/target/generated-sources/cpp</javahOutputDirectory>
+							<workingDirectory>${basedir}/src/main/java/de/lab4inf/wrb</workingDirectory>
+							<javahOutputFileName>Differentiator.h</javahOutputFileName>
+							<javahClassNames>
+								<javahClassName>de.lab4inf.wrb.Differentiator</javahClassName>
+							</javahClassNames>
+						</configuration>
+						<goals>
+							<goal>javah</goal>
+						</goals>
+					</execution>
+				</executions>
+
+			</plugin>
 		</plugins>
 	</build>
 </project>
