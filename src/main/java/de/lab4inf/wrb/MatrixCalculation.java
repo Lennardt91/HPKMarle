@@ -111,16 +111,11 @@ public final class MatrixCalculation {
 	 */
 	public static WRBMatrix matParallel3(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
-		WRBMatrix R;
 		final int l = A.getRowCount();
 		final int n = B.getColumnCount();
-		R = B.transpose();
-		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
+		double[][] a = A.getMatrix(), b = B.transpose().getMatrix() , c = new double[l][n];
 		WRBTaskObserver taskObs = new WRBTaskObserver();
-
 		
-		
-/*
 		for (int i = 0; i < l; i++) {
 			for (int j = 0; j < n; j++) {
 				final int fi = i;
@@ -130,43 +125,16 @@ public final class MatrixCalculation {
 							@Override
 							public void run() {
 								for (int k = 0; k < n; k++) {
-									c[fi][fj] += a[fi][k] * r[fj][k];
+									c[fi][fj] += a[fi][k] * b[fj][k];
 								}
 							}
 						}
-				);
-				
-				
-				
-			}
-		}
-*/
-		for (int i = 0; i < l; i++) {
-			for (int j = 0; j < n; j++) {
-				final int fi = i;
-				final int fj = j;
-				taskObs.doRunnable(
-						new Runnable() {
-							@Override
-							public void run() {
-								//double newc = 0;
-								for (int k = 0; k < n; k++) {
-									//newc += a[fi][k] * r[fj][k];
-									c[fi][fj] += a[fi][k] * r[fj][k];
-								}
-								//c[fi][fj] = newc;
-							}
-						}
-				);
-				
-				
-				
+				);		
 			}
 		}
 		
 		
 		taskObs.waitAllDone();
-		//taskObs.shutdownNow();
 		return new WRBMatrix(c);
 	}
 	
@@ -182,8 +150,10 @@ public final class MatrixCalculation {
 	 */
 	public static WRBMatrix matParallel4(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
-		WRBMatrix R=B.transpose();
-		double[][] a = A.getMatrix(), r = R.getMatrix(), c = new double[A.getRowCount()][B.getColumnCount()];
+		//WRBMatrix R=B.transpose();
+		final int l = A.getRowCount();
+		final int n = B.getColumnCount();
+		double[][] a = A.getMatrix(), b = B.transpose().getMatrix(), c = new double[l][n];
 		WRBTaskObserver taskObs = new WRBTaskObserver();
 		
 			for (int i = 0; i < A.getRowCount(); i++) {
@@ -193,15 +163,14 @@ public final class MatrixCalculation {
 					public void run() {
 						for (int j = 0; j < B.getColumnCount(); j++) {
 							for (int k = 0; k < A.getColumnCount(); k++) {
-								c[fi][j] += a[fi][k] * r[j][k];
+								c[fi][j] += a[fi][k] * b[j][k];
 							}
 						}
 
 					}
 				});
 			}
-		taskObs.waitAllDone();
-		//taskObs.shutdownNow();	
+		taskObs.waitAllDone();	
 		return new WRBMatrix(c);
 	}
 
@@ -218,11 +187,12 @@ public final class MatrixCalculation {
 	public static WRBMatrix matParallelOwn1(WRBMatrix A, WRBMatrix B) throws IllegalArgumentException {
 		matrixMulPossible(A, B);
 		double[][] a = A.getMatrix();
-		double[][] b = B.getMatrix();
-		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
+		double[][] b = B.transpose().getMatrix();
 		WRBTaskObserver taskObs = new WRBTaskObserver();
 		final int l = A.getRowCount();
 		final int n = B.getColumnCount();
+		double[][] c = new double[l][n];
+		
 		final int taskcount = l*n;
 		final int tasksPerRunnable = 800;
 		
@@ -231,7 +201,7 @@ public final class MatrixCalculation {
 			for (int x = 0; x < l; x++) {
 				for (int y = 0; y < n; y++) {
 					for (int z = 0; z < l; z++) {
-						c[x][y] += a[x][z] * b[z][y];
+						c[x][y] += a[x][z] * b[y][z];
 					}
 				}
 			}
@@ -249,7 +219,7 @@ public final class MatrixCalculation {
 						for (int i = startI; i < l; i++){
 							for (int j = innerJ; j < n; j++){
 								for (int k = 0; k < l; k++){
-											c[i][j] += a[i][k] * b[k][j];		
+											c[i][j] += a[i][k] * b[j][k];		
 								}
 										
 								counter++;
@@ -269,14 +239,6 @@ public final class MatrixCalculation {
 					
 				}
 		}
-		/*
-		for (int i = 0; i < l; i++) {
-					for (int j = 0; j < n; j++)
-								for (int k = 0; k < l; k++)
-									c[i][j] += a[i][k] * b[k][j];
-		}
-		*/
-		
 		
 		taskObs.waitAllDone();
 		taskObs.shutdownNow();
