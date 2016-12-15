@@ -155,13 +155,13 @@ public final class MatrixCalculation {
 		double[][] a = A.getMatrix(), b = B.transpose().getMatrix(), c = new double[l][n];
 		WRBTaskObserver taskObs = new WRBTaskObserver();
 		
-			for (int i = 0; i < A.getRowCount(); i++) {
+			for (int i = 0; i < l; i++) {
 				final int fi = i;
 				taskObs.doRunnable(new Runnable() {
 					@Override
 					public void run() {
-						for (int j = 0; j < B.getColumnCount(); j++) {
-							for (int k = 0; k < A.getColumnCount(); k++) {
+						for (int j = 0; j < n; j++) {
+							for (int k = 0; k < l; k++) {
 								c[fi][j] += a[fi][k] * b[j][k];
 							}
 						}
