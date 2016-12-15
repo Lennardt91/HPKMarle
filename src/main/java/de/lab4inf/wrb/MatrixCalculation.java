@@ -150,7 +150,6 @@ public final class MatrixCalculation {
 	 */
 	public static WRBMatrix matParallel4(WRBMatrix A, WRBMatrix B) {
 		matrixMulPossible(A, B);
-		//WRBMatrix R=B.transpose();
 		final int l = A.getRowCount();
 		final int n = B.getColumnCount();
 		double[][] a = A.getMatrix(), b = B.transpose().getMatrix(), c = new double[l][n];
@@ -194,7 +193,7 @@ public final class MatrixCalculation {
 		double[][] c = new double[l][n];
 		
 		final int taskcount = l*n;
-		final int tasksPerRunnable = 800;
+		final int tasksPerRunnable = 400;
 		
 		
 		if ((taskcount<50)){
@@ -241,7 +240,6 @@ public final class MatrixCalculation {
 		}
 		
 		taskObs.waitAllDone();
-		taskObs.shutdownNow();
 		return new WRBMatrix(c);
 		}
 
