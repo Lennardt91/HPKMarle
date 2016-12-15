@@ -120,7 +120,7 @@ public final class MatrixCalculation {
 
 		
 		
-
+/*
 		for (int i = 0; i < l; i++) {
 			for (int j = 0; j < n; j++) {
 				final int fi = i;
@@ -140,6 +140,30 @@ public final class MatrixCalculation {
 				
 			}
 		}
+*/
+		for (int i = 0; i < l; i++) {
+			for (int j = 0; j < n; j++) {
+				final int fi = i;
+				final int fj = j;
+				taskObs.doRunnable(
+						new Runnable() {
+							@Override
+							public void run() {
+								//double newc = 0;
+								for (int k = 0; k < n; k++) {
+									//newc += a[fi][k] * r[fj][k];
+									c[fi][fj] += a[fi][k] * r[fj][k];
+								}
+								//c[fi][fj] = newc;
+							}
+						}
+				);
+				
+				
+				
+			}
+		}
+		
 		
 		taskObs.waitAllDone();
 		//taskObs.shutdownNow();
@@ -197,32 +221,67 @@ public final class MatrixCalculation {
 		double[][] b = B.getMatrix();
 		double[][] c = new double[A.getRowCount()][B.getColumnCount()];
 		WRBTaskObserver taskObs = new WRBTaskObserver();
+		final int l = A.getRowCount();
+		final int n = B.getColumnCount();
+		final int taskcount = l*n;
+		final int tasksPerRunnable = 800;
 		
-		for (int i = 0; i < A.getRowCount(); i++) {
-				final int iFinal = i; // i muss final sein zum weiterbearbeiten
+		
+		if ((taskcount<50)){
+			for (int x = 0; x < l; x++) {
+				for (int y = 0; y < n; y++) {
+					for (int z = 0; z < l; z++) {
+						c[x][y] += a[x][z] * b[z][y];
+					}
+				}
+			}
+		}else{
+			//new Runnable
+			//teilt j und i in pakete von tasksPerRunnable ergebnissen auf und berechnet diese
+			for (int q = 0; q<taskcount;q += tasksPerRunnable ){
+				final int startI = q/n;
+				final int startJ = q%n;
 				taskObs.doRunnable(new Runnable() {
 					@Override
 					public void run() {
-						for (int j = 0; j < B.getColumnCount(); j++){
-							final int jFinal = j;
-							taskObs.doRunnable(new Runnable() {
-								@Override
-								public void run() {
-									for (int k = 0; k < A.getColumnCount(); k++)
-										c[iFinal][jFinal] += a[iFinal][k] * b[k][jFinal];
+						int counter = 0;
+						int innerJ = startJ;
+						for (int i = startI; i < l; i++){
+							for (int j = innerJ; j < n; j++){
+								for (int k = 0; k < l; k++){
+											c[i][j] += a[i][k] * b[k][j];		
 								}
-							});
+										
+								counter++;
+								if (!(counter<tasksPerRunnable)){
+									i = l;
+									j = n;
+								}
+								
+							}
+							innerJ = 0;
 						}
-							
-							
-					}
-				});
-			}
+						
+				}});
+				
+					
+					
+					
+				}
+		}
+		/*
+		for (int i = 0; i < l; i++) {
+					for (int j = 0; j < n; j++)
+								for (int k = 0; k < l; k++)
+									c[i][j] += a[i][k] * b[k][j];
+		}
+		*/
+		
 		
 		taskObs.waitAllDone();
-		//taskObs.shutdownNow();
+		taskObs.shutdownNow();
 		return new WRBMatrix(c);
-	}
+		}
 
 	/**
 	 * Berechnet, ob eine Matrix Multiplikation ueberhaupt in der Reihenfolge

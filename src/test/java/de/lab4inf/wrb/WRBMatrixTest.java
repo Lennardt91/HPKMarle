@@ -144,6 +144,8 @@ public class WRBMatrixTest {
 		c[2][2] = 83.;
 		WRBMatrix A = new WRBMatrix(a), B = new WRBMatrix(b), C = new WRBMatrix(c), result;
 		result = A.matParallelOwn1(B);
+		result.printMatr();
+		C.printMatr();
 		assertEquals(true, result.equals(C));
 	}
 
@@ -337,6 +339,7 @@ public class WRBMatrixTest {
 		WRBMatrix A = GenerateMatrix(1, 1), B = GenerateMatrix(10, 10), C = null;
 		C = A.matParallel4(B);
 	}
+	
 	@Test
 	public void TimingTest() {
 		HashMap<Integer, WRBMatrix> A = new HashMap<>();
@@ -362,6 +365,7 @@ public class WRBMatrixTest {
 			serieltimes.put(i, (time / scale));
 		}
 
+/*
 		for (int i = 64; i <= maxsize; i *= 2) {
 			a = A.get(i);
 			b = B.get(i);
@@ -372,8 +376,8 @@ public class WRBMatrixTest {
 			paralleltimes.put(i, (time / scale));
 		}
 		Ausgabe(serieltimes, paralleltimes, "parallel 2");
-
-		for (int i = 64; i <= maxsize; i *= 2) {
+*/
+	for (int i = 64; i <= maxsize; i *= 2) {
 			a = A.get(i);
 			b = B.get(i);
 			time = System.nanoTime();

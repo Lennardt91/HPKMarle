@@ -9,8 +9,8 @@ package de.lab4inf.wrb;
  */
 public class WRBMatrix {
 
-	volatile int m; // Anzahl Zeilen der Matrix
-	volatile int n; // Anzahl Spalten der Matrix
+	int m; // Anzahl Zeilen der Matrix
+	int n; // Anzahl Spalten der Matrix
 	volatile double[][] matrix; // Matrix als 2 dimensionales Array
 	
 	
@@ -71,7 +71,7 @@ public class WRBMatrix {
 	 * 
 	 * @return zufaelliger Wert im Rahmen des WRBMatrix rndFieldValue
 	 */
-	private int getRndFieldValue() {
+	private static int getRndFieldValue() {
 		return (int) Math.random() * maxFieldValue * 2 - maxFieldValue; // RND
 																		// Zahl
 																		// von
@@ -80,7 +80,7 @@ public class WRBMatrix {
 																		// +rndFieldValue
 	}
 
-	private int getRndRowOrColSize() {
+	private static int getRndRowOrColSize() {
 		return (int) Math.random() * maxRowOrColSizeValue + 1;
 	}
 
